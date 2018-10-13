@@ -1,0 +1,4 @@
+requests>=2.19
+pandas>=0.23
+pytest>=3.8
+pytest-cov>=2.6
