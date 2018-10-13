@@ -1,3 +1,5 @@
+![](https://travis-ci.com/kbrose/madison-lake-levels.svg?branch=master)
+
 ![](/static/lock-and-dam.jpeg)
 
 # Madison's lake levels
