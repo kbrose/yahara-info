@@ -18,9 +18,8 @@ def scrape(start: datetime, end: Union[datetime, None]=None) -> pd.DataFrame:
     date_format = '%m/%d/%Y'
     url = 'https://lwrd.countyofdane.com/chartlakelevels/Tabular'
     if end is None:
-        end_str = (datetime.now() + timedelta(days=1)).strftime(date_format)
-    else:
-        end_str = end.strftime(date_format)
+        end = datetime.now() + timedelta(days=1)
+    end_str = end.strftime(date_format)
     start_str = start.strftime(date_format)
     r = requests.post(url, data={'Start': start_str, 'End': end_str})
     dfs = pd.read_html(r.text)
