@@ -1,15 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-{% for lake, status in statuses.items() %}
+{% for lake, status in statuses %}
     <div class="row">
-        <div class="col s12 m5">
-        <div class="card-panel teal">
+        <div class="col s12">
+        <div class="card-panel cyan lighten-2">
             <span class="white-text">
-                <h1>{{ lake }}</h1>
                 {% if status %}
-                    {{ lake }} is above it's state-required maximum level.
+                    <h4>{{ lake }} is above its state-required maximum level.</h4>
                 {% else %}
-                    {{ lake }} is below it's state-required maximum level.
+                    <h4>{{ lake }} is below its state-required maximum level.</h4>
                 {% endif %}
             </span>
         </div>

@@ -12,7 +12,7 @@ def main():
         current[lake].iloc[0] > required_levels.loc[lake, 'summer_maximum']
         for lake in lakes
     ]
-    statuses = dict(zip([lake.title() for lake in lakes], statuses))
+    statuses = zip([lake.title() for lake in lakes], statuses)
     return flask.render_template('main.html', statuses=statuses)
 
 
