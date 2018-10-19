@@ -10,4 +10,4 @@ class Test_Required_Levels():
     @staticmethod
     def test_levels():
         df = required_levels.required_levels
-        assert df.shape == (4, 4)
+        assert df.shape == (4, 3)
