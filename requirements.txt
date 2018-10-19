@@ -6,3 +6,4 @@ BeautifulSoup4>=4.6
 pytest>=3.8
 pytest-cov>=2.6
 flask==1.0.2
+gunicorn
