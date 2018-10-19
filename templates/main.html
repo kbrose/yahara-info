@@ -1,18 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
-{% for lake, status in statuses %}
-    <div class="row">
-        <div class="col s12">
-        <div class="card-panel cyan lighten-2">
+<div class="row">
+{% for lake, is_high, streak, curr_height, max_allowed in info %}
+        <div class="col s12 m6">
+        <div class="card-panel {% if is_high %}cyan{% else %}blue-grey{% endif %} lighten-2">
             <span class="white-text">
-                {% if status %}
+                {% if is_high %}
                     <h4>{{ lake }} is above its state-required maximum level.</h4>
+                    It is currently {{ curr_height }} feet above sea level, which is
+                    {{ '%0.2f'| format(curr_height - max_allowed|float) }} feet above the maximum
+                    allowed level of {{ max_allowed }}.
+                    It has been above the maximum for {{ streak }} days.
                 {% else %}
                     <h4>{{ lake }} is below its state-required maximum level.</h4>
+                    It is currently {{ curr_height }} feet above sea level, which is
+                    {{ '%0.2f'| format(max_allowed - curr_height|float) }} feet below the maximum
+                    allowed level of {{ max_allowed }}.
+                    It has been below the maximum for {{ streak }} days.
                 {% endif %}
             </span>
         </div>
         </div>
-    </div>
 {% endfor %}
+</div>
 {% endblock %}
