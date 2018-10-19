@@ -2,6 +2,8 @@
 
 ![](/static/lock-and-dam.jpeg)
 
+*Tenney park lock (left) and dam (right). The dam keeps Lake Mendota artificially high. Picture by Kevin Rose.*
+
 # Madison's lake levels
 
 Madison Wisconsin and the surrounding Dane County saw near record level rainfalls in late August. Widespread flooding caused over two hundred million dollars in damage ([Associated Press](https://apnews.com/15a2ca91bcb94840bceb192365cf01a1)).
