@@ -1,8 +1,6 @@
 ![](https://travis-ci.com/kbrose/madison-lake-levels.svg?branch=master)
 
-![](/static/lock-and-dam.jpeg)
-
-*Tenney park lock (left) and dam (right). The dam keeps Lake Mendota artificially high. Picture by Kevin Rose.*
+![](/static/website-image.png)
 
 # Madison's lake levels
 
