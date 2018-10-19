@@ -13,3 +13,14 @@ How often has that been true? Are the lakes currently above that maximum level? 
 # Code
 
 The code is in `madison_lake_levels`, and requires python >= 3.6. You can run tests with `python -m pytest` run from the top level of this project.
+
+# Run
+
+Run with
+
+```bash
+# Install requirements
+pip install -r requirements.txt
+# Run the app
+export FLASK_APP=app.py; flask run
+```
