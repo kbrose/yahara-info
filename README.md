@@ -1,12 +1,10 @@
-![](https://travis-ci.com/kbrose/madison-lake-levels.svg?branch=master)
-
 ![](/static/website-image.png)
 
 # Madison's lake levels
 
 Madison Wisconsin and the surrounding Dane County saw near record level rainfalls in late August. Widespread flooding caused over two hundred million dollars in damage ([Associated Press](https://apnews.com/15a2ca91bcb94840bceb192365cf01a1)).
 
-In the months leading up to the flood, the lakes surrounding Madison were kept higher than the maximum level set by the Wisconsin Department of Natural Resources in 1979.
+In the months leading up to the flood, the lakes surrounding Madison were higher than the maximum level set by the Wisconsin Department of Natural Resources in 1979.
 
 How often has that been true? Are the lakes currently above that maximum level? Why were they kept so high? All of these questions and more we hope to address.
 
@@ -24,3 +22,5 @@ pip install -r requirements.txt
 # Run the app
 export FLASK_APP=app.py; flask run
 ```
+
+![](https://travis-ci.com/kbrose/madison-lake-levels.svg?branch=master)
