@@ -15,4 +15,4 @@ class Test_Scrape():
     @staticmethod
     def test_start_no_end():
         # cannot assert for correctness, only assure no errors are raised
-        scrape.scrape(dt.now() - timedelta(hours=1))
+        scrape.scrape(dt.now() - timedelta(hours=25))
