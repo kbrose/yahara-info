@@ -23,4 +23,6 @@ Run with
 pip install -r requirements.txt
 # Run the app
 export FLASK_APP=app.py; flask run
+# To run in debug mode (don't do in prod!):
+export FLASK_APP=app.py; export FLASK_ENV=development; flask run
 ```
