@@ -2,3 +2,4 @@
 .mypy_cache*
 .pytest_cache*
 .coverage
+madison_lake_levels/data/*.db
