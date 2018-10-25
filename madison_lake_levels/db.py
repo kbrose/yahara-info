@@ -7,7 +7,7 @@ import pandas as pd
 default_db_filepath = Path(__file__).parent / 'data' / 'lake_levels.db'
 
 class LakeLevelDB():
-    def __init__(self, db_filepath: str):
+    def __init__(self, db_filepath: Union[str, Path]):
         """
         Create a lake level database.
 
@@ -21,7 +21,7 @@ class LakeLevelDB():
             A good option for this is `default_db_filepath`.
         """
         self._db_filepath = db_filepath
-        self._conn = sqlite3.connect(db_filepath)
+        self._conn = sqlite3.connect(str(db_filepath))
         self._cursor = self._conn.cursor()
 
         self._create_if_nonexistent()
