@@ -44,8 +44,18 @@ class Test_DB():
         out_df = lldb.to_df()
         assert (out_df.values == self.example_df.values).all()
 
-    def test_insert_non_unique(self):
+    def test_insert_non_unique_raises(self):
         lldb = db.LakeLevelDB(self.test_db_filepath)
         lldb.insert(self.example_df)
         with pytest.raises(sqlite3.IntegrityError):
             lldb.insert(self.example_df)
+
+    def test_insert_non_unique_ok_if_allowed(self):
+        lldb = db.LakeLevelDB(self.test_db_filepath)
+        df = self.example_df.copy()
+        lldb.insert(df)
+        df['mendota'] = -1.0
+        lldb.insert(df, replace=True)
+        out_df = lldb.to_df()
+        assert out_df['mendota'].size == 1
+        assert out_df['mendota'].iloc[0] == -1.0
