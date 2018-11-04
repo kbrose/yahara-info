@@ -6,6 +6,7 @@ import pandas as pd
 
 default_db_filepath = Path(__file__).parent / 'data' / 'lake_levels.db'
 
+
 class LakeLevelDB():
     def __init__(self, db_filepath: Union[str, Path]):
         """
@@ -27,7 +28,8 @@ class LakeLevelDB():
         self._create_if_nonexistent()
 
     def _create_if_nonexistent(self):
-        cmd = "SELECT name FROM sqlite_master WHERE type='table' AND name='levels'"
+        cmd = ("SELECT name FROM sqlite_master"
+               " WHERE type='table' AND name='levels'")
         if self._cursor.execute(cmd).fetchone() is None:
             cmd = """CREATE TABLE levels (
                 datetime text PRIMARY KEY,
