@@ -60,7 +60,15 @@ class Test_DB():
         assert out_df['mendota'].size == 1
         assert out_df['mendota'].iloc[0] == -1.0
 
-    def test_clear(self):
+    def test_no_clear_does_not_clear(self):
+        lldb = db.LakeLevelDB(self.test_db_filepath)
+        lldb.insert(self.example_df)
+        del lldb
+        lldb = db.LakeLevelDB(self.test_db_filepath)
+        out_df = lldb.to_df()
+        assert out_df.size > 0
+
+    def test_clear_clears(self):
         lldb = db.LakeLevelDB(self.test_db_filepath)
         lldb.insert(self.example_df)
         del lldb
