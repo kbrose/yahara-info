@@ -8,7 +8,7 @@ default_db_filepath = Path(__file__).parent / 'data' / 'lake_levels.db'
 
 
 class LakeLevelDB():
-    def __init__(self, db_filepath: Union[str, Path]):
+    def __init__(self, db_filepath: Union[str, Path], clear=False):
         """
         Create a lake level database.
 
@@ -20,9 +20,17 @@ class LakeLevelDB():
         db_filepath : str
             The filepath to where the database should be stored.
             A good option for this is `default_db_filepath`.
+        clear : bool
+            If there is a database persisted at `db_filepath` and this
+            is truthy, then that database will be BLOWN AWAY!
         """
-        self._db_filepath = db_filepath
-        self._conn = sqlite3.connect(str(db_filepath))
+        self._db_filepath = Path(db_filepath)
+        if clear:
+            try:
+                self._db_filepath.unlink()
+            except FileNotFoundError:
+                pass
+        self._conn = sqlite3.connect(str(self._db_filepath))
         self._cursor = self._conn.cursor()
 
         self._create_if_nonexistent()
