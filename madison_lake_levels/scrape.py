@@ -1,11 +1,20 @@
 import json
 import io
+import functools
 
 import requests
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from typing import Union
+
+# See https://waterdata.usgs.gov/wi/nwis/current/?type=dane&group_key=NONE
+lake_name_to_usgs_site_num = {
+    'MENDOTA': '05428000',
+    'MONONA': '05429000',
+    'WAUBESA': '05429485',
+    'KEGONSA': '425715089164700'
+}
 
 
 def _format_usgs_lake_names(name):
@@ -46,13 +55,6 @@ def scrape(start: Union[datetime, None]=None,
     else:
         end_arg = '&endDT={}'.format(end.strftime(date_format))
 
-    # See https://waterdata.usgs.gov/wi/nwis/current/?type=dane&group_key=NONE
-    lake_name_to_usgs_site_num = {
-        'MENDOTA': '05428000',
-        'MONONA': '05429000',
-        'WAUBESA': '05429485',
-        'KEGONSA': '425715089164700'
-    }
     sites = ','.join(lake_name_to_usgs_site_num.values())
 
     base_url = 'http://waterservices.usgs.gov/nwis/iv/?'
@@ -69,6 +71,38 @@ def scrape(start: Union[datetime, None]=None,
         assert len(times) == len(gage_heights)
         df[lake_name] = pd.Series(dict(zip(times, gage_heights)))
 
+    datum = get_datum_elevation(sites)
+
+    for name, datum_elevation in datum['alt_va'].iteritems():
+        df[name] += datum_elevation
+
+    df.index = pd.to_datetime(df.index, utc=True)
+
+    return df
+
+
+@functools.lru_cache(maxsize=50)
+def get_datum_elevation(sites: str) -> pd.DataFrame:
+    """
+    Given a comma separated list of site numbers, return the datum
+    elevations of those sites. From what I can tell, this is the base
+    height of the sensor that records lake levls, so the total height
+    of the lake level is the sum of the datum elevation and the sensor reading.
+
+    This function is cached since the rate at which these values change has
+    historically been on the order of decades.
+
+    Inputs
+    ----------
+    sites : str
+        Comma separated list of site numbers. See `lake_name_to_usgs_site_num`.
+
+    Returns
+    -------
+    datum : pandas.DataFrame
+        A dataframe of datum elevations. Rows are keyed off lake name,
+        and the main column of interest will be `'alt_va'`.
+    """
     base_datum_url = 'https://waterservices.usgs.gov/nwis/site/?'
     datum_url_args = f'&sites={sites}&format=rdb'
     r = requests.post(base_datum_url + datum_url_args)
@@ -82,9 +116,4 @@ def scrape(start: Union[datetime, None]=None,
     datum['station_nm'] = datum['station_nm'].apply(_format_usgs_lake_names)
     datum.set_index('station_nm', drop=True, inplace=True)
     datum['alt_va'] = datum['alt_va'].apply(float)
-    for name, datum_elevation in datum['alt_va'].iteritems():
-        df[name] += datum_elevation
-
-    df.index = pd.to_datetime(df.index, utc=True)
-
-    return df
+    return datum
