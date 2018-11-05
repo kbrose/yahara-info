@@ -13,7 +13,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(full_scrape):
-    url = 'https://madison-lake-levels.herokuapp.com/'
+    url = 'https://madison-lake-levels.herokuapp.com'
     if full_scrape:
         start_dt = dt(2007, 10, 1)
         end_dt = dt.utcnow()

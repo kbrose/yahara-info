@@ -6,6 +6,8 @@ import pandas as pd
 
 import madison_lake_levels as mll
 
+background_thread = ThreadPoolExecutor(max_workers=1)
+
 app = flask.Flask(__name__)
 
 
@@ -56,8 +58,9 @@ def database_dump():
     )
 
 
-@app.route('/update/', defaults={'start': None, 'end': None})
-@app.route('/update/<start>/<end>')
+@app.route('/update/', defaults={'start': None, 'end': None},
+           methods=['GET', 'POST'])
+@app.route('/update/<start>/<end>', methods=['GET', 'POST'])
 def update_db(start, end):
     lldb = mll.db.LakeLevelDB(mll.db.default_db_filepath)
 
@@ -71,7 +74,7 @@ def update_db(start, end):
     else:
         end_dt = pd.to_datetime(end, utc=True).to_pydatetime()
 
-    mll.scrape.backfill(start_dt, end_dt, lldb, True)
+    background_thread.submit(mll.scrape.backfill, start_dt, end_dt, lldb, True)
     return flask.redirect('/')
 
 
