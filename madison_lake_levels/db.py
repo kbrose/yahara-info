@@ -32,6 +32,7 @@ class LakeLevelDB():
                 pass
         self._conn = sqlite3.connect(str(self._db_filepath))
         self._cursor = self._conn.cursor()
+        self._columns = ['datetime', 'mendota', 'monona', 'waubesa', 'kegonsa']
 
         self._create_if_nonexistent()
 
@@ -86,4 +87,14 @@ class LakeLevelDB():
             self._conn
         ).set_index('datetime', drop=True)
         df.index = pd.to_datetime(df.index)
+        return df
+
+    def most_recent(self) -> dict:
+        """
+        Return the most recent reading.
+        """
+        cmd = "SELECT * FROM levels ORDER BY datetime LIMIT 1"
+        df = pd.read_sql_query(cmd, self._conn)
+        df['datetime'] = pd.to_datetime(df['datetime'])
+        df = df.set_index('datetime', drop=True)
         return df
