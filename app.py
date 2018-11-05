@@ -15,6 +15,8 @@ app = flask.Flask(__name__)
 def main():
     db = mll.db.LakeLevelDB(mll.db.default_db_filepath)
     df = db.to_df()
+    if not df.size:
+        return flask.render_template('main.html', info=[])
     df = df.sort_index()
     req_levels = mll.required_levels.required_levels
     req_maxes = req_levels['summer_maximum']
