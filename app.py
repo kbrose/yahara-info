@@ -1,12 +1,9 @@
 from datetime import datetime as dt
-from concurrent.futures import ThreadPoolExecutor
 
 import flask
 import pandas as pd
 
 import madison_lake_levels as mll
-
-background_thread = ThreadPoolExecutor(max_workers=1)
 
 app = flask.Flask(__name__)
 
@@ -76,7 +73,7 @@ def update_db(start, end):
     else:
         end_dt = pd.to_datetime(end, utc=True).to_pydatetime()
 
-    background_thread.submit(mll.scrape.backfill, start_dt, end_dt, lldb, True)
+    mll.scrape.backfill(start_dt, end_dt, lldb, True)
     return flask.redirect('/')
 
 
