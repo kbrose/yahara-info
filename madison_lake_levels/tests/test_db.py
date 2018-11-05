@@ -75,3 +75,8 @@ class Test_DB():
         lldb = db.LakeLevelDB(self.test_db_filepath, clear=True)
         out_df = lldb.to_df()
         assert out_df.size == 0
+
+    def test_most_recent(self):
+        lldb = db.LakeLevelDB(self.test_db_filepath)
+        lldb.insert(self.example_df)
+        assert lldb.most_recent().size == 4
