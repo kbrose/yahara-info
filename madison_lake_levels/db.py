@@ -81,7 +81,9 @@ class LakeLevelDB():
 
         Not for the faint of heart, nor faint of RAM.
         """
-        return pd.read_sql_query(
+        df = pd.read_sql_query(
             'SELECT * FROM levels',
             self._conn
         ).set_index('datetime', drop=True)
+        df.index = pd.to_datetime(df.index)
+        return df
