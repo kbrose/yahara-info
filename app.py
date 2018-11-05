@@ -73,7 +73,7 @@ def update_db(start, end):
     else:
         end_dt = pd.to_datetime(end, utc=True).to_pydatetime()
 
-    background_thread.submit(mll.scrape.backfill, start_dt, end_dt, lldb)
+    background_thread.submit(mll.scrape.backfill, start_dt, end_dt, lldb, True)
     return flask.redirect('/')
 
 
