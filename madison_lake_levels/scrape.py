@@ -1,12 +1,15 @@
 import json
 import io
 import functools
+import time
 
 import requests
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from typing import Union
+
+from .db import LakeLevelDB
 
 # See https://waterdata.usgs.gov/wi/nwis/current/?type=dane&group_key=NONE
 lake_name_to_usgs_site_num = {
@@ -117,3 +120,13 @@ def get_datum_elevation(sites: str) -> pd.DataFrame:
     datum.set_index('station_nm', drop=True, inplace=True)
     datum['alt_va'] = datum['alt_va'].apply(float)
     return datum
+
+
+def backfill(start: datetime, end: datetime, lldb: LakeLevelDB):
+    step = timedelta(days=30)
+    while start < end:
+        # be kind to the servers
+        time.sleep(0.01)
+        df = scrape(start, min(start + step, end))
+        lldb.insert(df, replace=True)
+        start += step
