@@ -127,11 +127,17 @@ def get_datum_elevation(sites: str) -> pd.DataFrame:
     return datum
 
 
-def backfill(start: datetime, end: datetime, lldb: LakeLevelDB):
+def backfill(start: datetime, end: datetime, lldb: LakeLevelDB, verbose=False):
     step = timedelta(days=30)
+    if verbose:
+        print(f'Starting backfill from {start} to {end}')
     while start < end:
         # be kind to the servers
         time.sleep(0.01)
         df = scrape(start, min(start + step, end))
         lldb.insert(df, replace=True)
         start += step
+        if verbose:
+            print(' Scraped starting at {start}')
+    if verbose:
+        print(' Done.')
