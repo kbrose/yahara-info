@@ -5,10 +5,11 @@ import madison_lake_levels as mll
 
 app = flask.Flask(__name__)
 
+
 @app.route('/')
 def main():
-    ndays = 75
-    df = mll.scrape.scrape(datetime.utcnow() - timedelta(days=ndays))
+    db = mll.db.LakeLevelDB(mll.db.default_db_filepath)
+    df = db.to_df()
     df = df.sort_index()
     req_levels = mll.required_levels.required_levels
     req_maxes = req_levels['summer_maximum']
@@ -25,13 +26,13 @@ def main():
                 time_above = df_lake.index[-1] - below_level_times.max()
                 streaks.append(time_above.days)
             else:
-                streaks.append('at least {}'.format(ndays))
+                streaks.append('a good number of')
         else:
             if above_level_times.size:
                 time_below = df_lake.index[-1] - above_level_times.max()
                 streaks.append(time_below.days)
             else:
-                streaks.append('at least {}'.format(ndays))
+                streaks.append('a good number of')
     info = zip(
         [lake.title() for lake in lakes],
         is_high,
@@ -40,6 +41,16 @@ def main():
         req_maxes[lakes].tolist()
     )
     return flask.render_template('main.html', info=info)
+
+
+@app.route('/db')
+def database_dump():
+    return flask.send_file(
+        str(mll.db.default_db_filepath),
+        mimetype='application/octet-stream',
+        attachment_filename=mll.db.default_db_filepath.name,
+        as_attachment=True
+    )
 
 
 if __name__ == '__main__':
