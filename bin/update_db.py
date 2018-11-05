@@ -17,7 +17,7 @@ def main(full_scrape):
     if full_scrape:
         start_dt = dt(2007, 10, 1)
         end_dt = dt.utcnow()
-        step = timedelta(days=30)
+        step = timedelta(days=120)
         while start_dt < end_dt:
             start = start_dt.isoformat()
             end = min(start_dt + step, end_dt).isoformat()
