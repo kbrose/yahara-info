@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta
-
 import flask
 import madison_lake_levels as mll
 
