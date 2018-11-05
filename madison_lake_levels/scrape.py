@@ -138,6 +138,6 @@ def backfill(start: datetime, end: datetime, lldb: LakeLevelDB, verbose=False):
         lldb.insert(df, replace=True)
         start += step
         if verbose:
-            print(' Scraped starting at {start}')
+            print(f' Scraped starting at {start}')
     if verbose:
         print(' Done.')

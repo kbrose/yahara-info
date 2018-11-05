@@ -1,4 +1,6 @@
+from datetime import datetime as dt
 import flask
+import pandas as pd
 import madison_lake_levels as mll
 
 app = flask.Flask(__name__)
@@ -49,6 +51,24 @@ def database_dump():
         attachment_filename=mll.db.default_db_filepath.name,
         as_attachment=True
     )
+
+
+@app.route('/update/', defaults={'start': None, 'end': None})
+@app.route('/update/<start>/<end>', methods=['POST'])
+def update_db(start, end):
+    lldb = mll.db.LakeLevelDB(mll.db.default_db_filepath)
+
+    if start is None:
+        start_dt = lldb.most_recent().index[0].to_pydatetime()
+    else:
+        start_dt = pd.to_datetime(start, utc=True).to_pydatetime()
+
+    if end is None:
+        end_dt = dt.utcnow()
+    else:
+        end_dt = pd.to_datetime(end, utc=True).to_pydatetime()
+
+    mll.scrape.backfill(start_dt, end_dt, lldb)
 
 
 if __name__ == '__main__':

@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 import argparse
-
 from datetime import datetime as dt
 
-import madison_lake_levels as mll
+import requests
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -13,12 +12,13 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(full_scrape):
-    lldb = mll.db.LakeLevelDB(mll.db.default_db_filepath)
+    url = 'https://madison-lake-levels.herokuapp.com/'
     if full_scrape:
-        mll.scrape.backfill(dt(2007, 10, 1), dt.utcnow(), lldb, True)
+        start = dt(2007, 10, 1).isoformat()
+        end = dt.utcnow().isoformat()
+        requests.post(url + f'/update/{start}/{end}')
     else:
-        most_recent_time = lldb.most_recent().index[0].to_pydatetime()
-        mll.scrape.backfill(most_recent_time, dt.utcnow(), lldb, True)
+        requests.post(url + f'/update')
 
 
 if __name__ == '__main__':
