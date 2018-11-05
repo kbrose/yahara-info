@@ -5,6 +5,7 @@ import time
 
 import requests
 import pandas as pd
+import numpy as np
 from datetime import datetime, timedelta
 
 from typing import Union
@@ -73,6 +74,10 @@ def scrape(start: Union[datetime, None]=None,
         times = [v['dateTime'] for v in values]
         assert len(times) == len(gage_heights)
         df[lake_name] = pd.Series(dict(zip(times, gage_heights)))
+
+    for lake_name in lake_name_to_usgs_site_num.keys():
+        if lake_name.lower() not in df.columns:
+            df[lake_name.lower()] = np.nan
 
     datum = get_datum_elevation(sites)
 
