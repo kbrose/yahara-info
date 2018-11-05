@@ -2,6 +2,8 @@
 
 # Madison's lake levels
 
+https://madison-lake-levels.herokuapp.com/
+
 Madison Wisconsin and the surrounding Dane County saw near record level rainfalls in late August. Widespread flooding caused over two hundred million dollars in damage ([Associated Press](https://apnews.com/15a2ca91bcb94840bceb192365cf01a1)).
 
 In the months leading up to the flood, the lakes surrounding Madison were higher than the maximum level set by the Wisconsin Department of Natural Resources in 1979.
@@ -26,3 +28,9 @@ export FLASK_APP=app.py; export FLASK_ENV=development; flask run
 ```
 
 ![](https://travis-ci.com/kbrose/madison-lake-levels.svg?branch=master)
+
+# Deploy
+
+The webapp is deployed to Heroku. It can be found at https://madison-lake-levels.herokuapp.com/.
+
+A daily cron job runs that updates the database. The job is created using [Heroku Scheduler](https://devcenter.heroku.com/articles/scheduler), and hits a simple API route on the web-app that causes an update.

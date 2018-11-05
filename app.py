@@ -54,7 +54,7 @@ def database_dump():
 
 
 @app.route('/update/', defaults={'start': None, 'end': None})
-@app.route('/update/<start>/<end>', methods=['POST'])
+@app.route('/update/<start>/<end>')
 def update_db(start, end):
     lldb = mll.db.LakeLevelDB(mll.db.default_db_filepath)
 
