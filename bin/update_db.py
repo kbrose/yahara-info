@@ -15,10 +15,8 @@ def build_parser() -> argparse.ArgumentParser:
 def main(full_scrape):
     url = 'https://madison-lake-levels.herokuapp.com'
     if full_scrape:
-        end = dt.utcnow().isoformat()
-        start = (dt.utcnow() - timedelta(days=1)).isoformat()
-        requests.post(url + f'/update/{start}/{end}')
         start = dt(2007, 10, 1).isoformat()
+        end = dt.utcnow().isoformat()
         requests.post(url + f'/update/{start}/{end}')
     else:
         requests.post(url + f'/update')
