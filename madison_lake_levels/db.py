@@ -1,5 +1,6 @@
 import os
 from functools import wraps
+import re
 
 import psycopg2
 import pandas as pd
@@ -125,12 +126,21 @@ class LakeLevelDB():
         return df
 
 
-def config_from_env():
+def config_from_dburl(db_url):
+    """
+    Return configuration that can be passed to
+    LakeLevelDB. Primary use case is parsing the DATABASE_URL
+    environment variable used by heroku.
+    """
+    if db_url is None:
+        raise RuntimeError('DATABASE_URL env var must be set.')
+    db_url = db_url.replace('postgres://', '')
+    user, password, host, port, database = re.split(':|@|/', db_url)
     config = {
-        'database': os.getenv('DB_NAME'),
-        'user': os.getenv('DB_USER'),
-        'password': os.getenv('DB_PASSWORD'),
-        'host': os.getenv('DB_HOST'),
-        'port': os.getenv('DB_PORT'),
+        'database': database,
+        'user': user,
+        'password': password,
+        'host': host,
+        'port': port,
     }
     return config

@@ -1,4 +1,5 @@
 from datetime import datetime as dt
+import os
 
 import flask
 import pandas as pd
@@ -7,7 +8,9 @@ import madison_lake_levels as mll
 
 app = flask.Flask(__name__)
 
-lldb = mll.db.LakeLevelDB(**mll.db.config_from_env())
+lldb = mll.db.LakeLevelDB(
+    **mll.db.config_from_dburl(os.getenv('DATABASE_URL'))
+)
 
 @app.route('/')
 def main():

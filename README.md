@@ -35,9 +35,8 @@ Run with
 ```bash
 # Get env set up
 export FLASK_APP=app.py
-export DB_NAME=madisonlakes
-export DB_USER=$USER
-createdb $DB_NAME -U $USER
+export DATABASE_URL=postgres://$USER:@:/madisonlakes # heroku's env var format
+createdb madisonlakes -U $USER
 # Run the app
 flask run
 # To run in debug mode (don't do in prod!):

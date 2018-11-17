@@ -82,3 +82,8 @@ class Test_DB():
         lldb = db.LakeLevelDB(**self.db_config)
         lldb.insert(self.example_df)
         assert lldb.most_recent().size == 4
+
+    def test_config_from_env(self):
+        c = db.config_from_dburl('postgres://user:password@host:port/database')
+        for key in ['user', 'password', 'host', 'port', 'database']:
+            assert c[key] == key
