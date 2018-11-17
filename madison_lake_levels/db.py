@@ -1,47 +1,33 @@
 from pathlib import Path
-import sqlite3
-from typing import Union
 
+import psycopg2
 import pandas as pd
 
 default_db_filepath = Path(__file__).parent / 'data' / 'lake_levels.db'
 
 
 class LakeLevelDB():
-    def __init__(self, db_filepath: Union[str, Path], clear=False):
+    def __init__(self, **config):
         """
-        Create a lake level database.
+        Connect to a lake level database.
 
-        If the file located at db_filepath exists, it is assumed to be
-        a correctly formatted database.
-
-        Inputs
-        ------
-        db_filepath : str
-            The filepath to where the database should be stored.
-            A good option for this is `default_db_filepath`.
-        clear : bool
-            If there is a database persisted at `db_filepath` and this
-            is truthy, then that database will be BLOWN AWAY!
+        Arguments in **config will be passed directly to `psycopg2.connect`.
         """
-        self._db_filepath = Path(db_filepath)
-        if clear:
-            try:
-                self._db_filepath.unlink()
-            except FileNotFoundError:
-                pass
-        self._conn = sqlite3.connect(str(self._db_filepath))
+        self._conn = psycopg2.connect(**config)
         self._cursor = self._conn.cursor()
         self._columns = ['datetime', 'mendota', 'monona', 'waubesa', 'kegonsa']
 
         self._create_if_nonexistent()
 
     def _create_if_nonexistent(self):
-        cmd = ("SELECT name FROM sqlite_master"
-               " WHERE type='table' AND name='levels'")
-        if self._cursor.execute(cmd).fetchone() is None:
+        cmd = ("SELECT EXISTS ("
+               " SELECT 1"
+               " FROM  information_schema.tables"
+               " WHERE table_name = 'levels');")
+        self._cursor.execute(cmd)
+        if not self._cursor.fetchone()[0]:
             cmd = """CREATE TABLE levels (
-                datetime text PRIMARY KEY,
+                datetime date PRIMARY KEY,
                 mendota real,
                 monona real,
                 waubesa real,
@@ -51,7 +37,7 @@ class LakeLevelDB():
             self._cursor.execute(cmd)
             self._conn.commit()
 
-    def insert(self, df: pd.DataFrame, replace=False):
+    def insert(self, df: pd.DataFrame):
         """
         Insert a dataframe of data into the database.
 
@@ -60,17 +46,13 @@ class LakeLevelDB():
         df : pd.DataFrame
             DataFrame with a datetime row index and four columns
             with names ['mendota', 'monona', 'waubesa', 'kegonsa']
-        replace
-            If truthy, any datetime conflicts will be updated treating
-            the input df as correct. Otherwise, conflicts will result
-            in sqlite3.IntegrityError
         """
         df = df[['mendota', 'monona', 'waubesa', 'kegonsa']]
-        cmd = """INSERT{replacer} INTO levels (
+        cmd = """INSERT INTO levels (
             datetime, mendota, monona, waubesa, kegonsa
         )
-        VALUES (?, ?, ?, ?, ?);
-        """.format(replacer=' OR REPLACE' if replace else '')
+        VALUES (%s, %s, %s, %s, %s);
+        """
         for time, row in df.iterrows():
             time = time.isoformat()
             self._cursor.execute(cmd, [time] + row.tolist())

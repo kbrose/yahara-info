@@ -10,11 +10,25 @@ In the months leading up to the flood, the lakes surrounding Madison were higher
 
 How often has that been true? Are the lakes currently above that maximum level? Why were they kept so high? All of these questions and more we hope to address.
 
-# Code
+## Environment setup
+
+Install [postgresql](https://www.postgresql.org/download/).
+
+Make sure you have an environment variable named `USER` with your username as its value. On UNIX variants this likely already exists
+
+Create a new user with your username who has permissions to create a database, e.g. with `sudo -u postgres createuser -s $USER`.
+
+It is recommended to set up some sort of virtual environment. After that, install the requirements with
+
+```bash
+pip install -r requirements.txt
+```
+
+## Code
 
 The code is in `madison_lake_levels`, and requires python >= 3.6. You can run tests with `python -m pytest` run from the top level of this project.
 
-# Run
+## Run
 
 Run with
 
@@ -29,7 +43,7 @@ export FLASK_APP=app.py; export FLASK_ENV=development; flask run
 
 ![](https://travis-ci.com/kbrose/madison-lake-levels.svg?branch=master)
 
-# Deploy
+## Deploy
 
 The webapp is deployed to Heroku. It can be found at https://madison-lake-levels.herokuapp.com/.
 
