@@ -3,6 +3,7 @@ pandas>=0.23
 lxml>=4.2
 html5lib>=1.0
 BeautifulSoup4>=4.6
+psycopg2-binary>=2.7
 pytest>=3.8
 pytest-cov>=2.6
 flask==1.0.2

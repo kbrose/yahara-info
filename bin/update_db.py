@@ -24,7 +24,7 @@ def main(full_scrape):
             requests.post(url + f'/update/{start}/{end}')
             start_dt += step
     else:
-        requests.post(url + f'/update')
+        requests.post(url + '/update')
 
 
 if __name__ == '__main__':
