@@ -66,18 +66,17 @@ class Test_DB():
         lldb = db.LakeLevelDB(**self.db_config)
         lldb.insert(self.example_df)
         with pytest.raises(psycopg2.IntegrityError):
-            lldb.insert(self.example_df)
+            lldb.insert(self.example_df, replace=False)
 
-    @pytest.mark.skip
     def test_insert_non_unique_ok_if_allowed(self):
         lldb = db.LakeLevelDB(**self.db_config)
         df = self.example_df.copy()
         lldb.insert(df)
-        df['mendota'] = -1.0
+        df['mendota'] = 10.0
         lldb.insert(df, replace=True)
         out_df = lldb.to_df()
         assert out_df['mendota'].size == 1
-        assert out_df['mendota'].iloc[0] == -1.0
+        assert out_df['mendota'].iloc[0] == 10.0
 
     def test_most_recent(self):
         lldb = db.LakeLevelDB(**self.db_config)

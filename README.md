@@ -28,17 +28,21 @@ pip install -r requirements.txt
 
 The code is in `madison_lake_levels`, and requires python >= 3.6. You can run tests with `python -m pytest` run from the top level of this project.
 
-## Run
+## Running locally
 
 Run with
 
 ```bash
-# Install requirements
-pip install -r requirements.txt
+# Get env set up
+export FLASK_APP=app.py
+export DB_NAME=madisonlakes
+export DB_USER=$USER
+createdb $DB_NAME -U $USER
 # Run the app
-export FLASK_APP=app.py; flask run
+flask run
 # To run in debug mode (don't do in prod!):
-export FLASK_APP=app.py; export FLASK_ENV=development; flask run
+export FLASK_ENV=development
+flask run
 ```
 
 ![](https://travis-ci.com/kbrose/madison-lake-levels.svg?branch=master)

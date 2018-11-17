@@ -1,9 +1,23 @@
-from pathlib import Path
+import os
+from functools import wraps
 
 import psycopg2
 import pandas as pd
 
-default_db_filepath = Path(__file__).parent / 'data' / 'lake_levels.db'
+
+def _rollback_or_commit(f):
+    @wraps(f)
+    def function_wrapper(self, *args, **kwargs):
+        """ function_wrapper of greeting """
+        try:
+            ret = f(self, *args, **kwargs)
+        except psycopg2.Error:
+            self._conn.rollback()
+            raise
+        self._conn.commit()
+        return ret
+
+    return function_wrapper
 
 
 class LakeLevelDB():
@@ -37,7 +51,8 @@ class LakeLevelDB():
             self._cursor.execute(cmd)
             self._conn.commit()
 
-    def insert(self, df: pd.DataFrame):
+    @_rollback_or_commit
+    def insert(self, df: pd.DataFrame, replace=True):
         """
         Insert a dataframe of data into the database.
 
@@ -46,17 +61,45 @@ class LakeLevelDB():
         df : pd.DataFrame
             DataFrame with a datetime row index and four columns
             with names ['mendota', 'monona', 'waubesa', 'kegonsa']
+        replace : bool
+            If truthy, some values may be replaced if the value in
+            df is higher.
         """
-        df = df[['mendota', 'monona', 'waubesa', 'kegonsa']]
-        cmd = """INSERT INTO levels (
+        df = df[self._columns[1:]]
+
+        insert_cmd = """INSERT INTO levels (
             datetime, mendota, monona, waubesa, kegonsa
         )
         VALUES (%s, %s, %s, %s, %s);
         """
+
+        update_cmd_static = """UPDATE levels
+        SET {columns}
+        WHERE datetime=%s;
+        """
+
+        select_cmd = "SELECT * FROM levels WHERE datetime=%s;"
+
         for time, row in df.iterrows():
-            time = time.isoformat()
-            self._cursor.execute(cmd, [time] + row.tolist())
-        self._conn.commit()
+            time = time.to_pydatetime()
+            if replace:
+                self._cursor.execute(select_cmd, (time,))
+                result = self._cursor.fetchone()
+                update_cmd = update_cmd_static
+                if result:
+                    for lake, height in zip(self._columns[1:], result[1:]):
+                        if height < row[lake]:
+                            update_cmd = update_cmd.format(
+                                columns=f'{lake}={row[lake]}, {{columns}}'
+                            )
+                    update_cmd = update_cmd.replace(', {columns}', '')
+                    if 'SET {columns}' not in update_cmd:
+                        self._cursor.execute(update_cmd, (time,))
+                    # else row already existed but no updates need to be made
+                else:
+                    self._cursor.execute(insert_cmd, [time] + row.tolist())
+            else:
+                self._cursor.execute(insert_cmd, [time] + row.tolist())
 
     def to_df(self) -> pd.DataFrame:
         """
@@ -80,3 +123,14 @@ class LakeLevelDB():
         df['datetime'] = pd.to_datetime(df['datetime'])
         df = df.set_index('datetime', drop=True)
         return df
+
+
+def config_from_env():
+    config = {
+        'database': os.getenv('DB_NAME'),
+        'user': os.getenv('DB_USER'),
+        'password': os.getenv('DB_PASSWORD'),
+        'host': os.getenv('DB_HOST'),
+        'port': os.getenv('DB_PORT'),
+    }
+    return config
