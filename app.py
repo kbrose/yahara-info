@@ -1,5 +1,6 @@
 from datetime import datetime as dt
 import os
+import io
 
 import flask
 import pandas as pd
@@ -50,14 +51,15 @@ def main():
     return flask.render_template('main.html', info=info)
 
 
-# @app.route('/db')
-# def database_dump():
-#     return flask.send_file(
-#         str(mll.db.default_db_filepath),
-#         mimetype='application/octet-stream',
-#         attachment_filename=mll.db.default_db_filepath.name,
-#         as_attachment=True
-#     )
+@app.route('/db')
+def database_dump():
+    df = lldb.to_df()
+    return flask.send_file(
+        io.BytesIO(df.to_csv().encode('utf-8')),
+        mimetype='text/csv',
+        attachment_filename='madison_lake_levels.csv',
+        as_attachment=True
+    )
 
 
 @app.route('/update/', defaults={'start': None, 'end': None},
