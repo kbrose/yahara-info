@@ -7,11 +7,11 @@ import madison_lake_levels as mll
 
 app = flask.Flask(__name__)
 
+lldb = mll.db.LakeLevelDB(**mll.db.config_from_env())
 
 @app.route('/')
 def main():
-    db = mll.db.LakeLevelDB(mll.db.default_db_filepath)
-    df = db.to_df()
+    df = lldb.to_df()
     if not df.size:
         return flask.render_template('main.html', info=[])
     df = df.sort_index()
@@ -47,22 +47,20 @@ def main():
     return flask.render_template('main.html', info=info)
 
 
-@app.route('/db')
-def database_dump():
-    return flask.send_file(
-        str(mll.db.default_db_filepath),
-        mimetype='application/octet-stream',
-        attachment_filename=mll.db.default_db_filepath.name,
-        as_attachment=True
-    )
+# @app.route('/db')
+# def database_dump():
+#     return flask.send_file(
+#         str(mll.db.default_db_filepath),
+#         mimetype='application/octet-stream',
+#         attachment_filename=mll.db.default_db_filepath.name,
+#         as_attachment=True
+#     )
 
 
 @app.route('/update/', defaults={'start': None, 'end': None},
            methods=['GET', 'POST'])
 @app.route('/update/<start>/<end>', methods=['GET', 'POST'])
 def update_db(start, end):
-    lldb = mll.db.LakeLevelDB(mll.db.default_db_filepath)
-
     if start is None:
         start_dt = lldb.most_recent().index[0].to_pydatetime()
     else:

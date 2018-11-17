@@ -135,7 +135,8 @@ def backfill(start: datetime, end: datetime, lldb: LakeLevelDB, verbose=False):
         # be kind to the servers
         time.sleep(0.01)
         df = scrape(start, min(start + step, end))
-        lldb.insert(df, replace=True)
+        df = df.resample('1D').max()
+        lldb.insert(df)
         start += step
         if verbose:
             print(f' Scraped starting at {start}')
