@@ -119,7 +119,7 @@ class LakeLevelDB():
         """
         Return the most recent reading.
         """
-        cmd = "SELECT * FROM levels ORDER BY datetime LIMIT 1"
+        cmd = "SELECT * FROM levels ORDER BY datetime DESC LIMIT 1"
         df = pd.read_sql_query(cmd, self._conn)
         df['datetime'] = pd.to_datetime(df['datetime'])
         df = df.set_index('datetime', drop=True)

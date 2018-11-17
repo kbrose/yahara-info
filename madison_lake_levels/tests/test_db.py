@@ -81,7 +81,10 @@ class Test_DB():
     def test_most_recent(self):
         lldb = db.LakeLevelDB(**self.db_config)
         lldb.insert(self.example_df)
-        assert lldb.most_recent().size == 4
+        df2 = self.example_df.copy()
+        df2.index = pd.to_datetime(['2020-10-01'])
+        lldb.insert(df2)
+        assert lldb.most_recent().index[0] == pd.to_datetime('2020-10-01')
 
     def test_config_from_env(self):
         c = db.config_from_dburl('postgres://user:password@host:port/database')
