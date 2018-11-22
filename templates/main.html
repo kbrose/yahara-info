@@ -3,7 +3,7 @@
 <div class="row">
 {% for lake, is_high, streak, curr_height, max_allowed in info %}
         <div class="col s12 m6">
-        <div class="card-panel {% if is_high %}cyan{% else %}blue-grey{% endif %} lighten-2">
+        <div class="card-panel {% if is_high %}cyan{% else %}blue-grey{% endif %} lighten-2" style="height: 220px;">
             <span class="white-text">
                 {% if is_high %}
                     <h4>{{ lake }} is above its state-required maximum level.</h4>
