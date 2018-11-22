@@ -1,9 +1,11 @@
 from datetime import datetime as dt
+from datetime import timedelta
 import os
 import io
 
 import flask
 import pandas as pd
+import pytz
 
 import madison_lake_levels as mll
 
@@ -67,12 +69,15 @@ def database_dump():
 @app.route('/update/<start>/<end>', methods=['GET', 'POST'])
 def update_db(start, end):
     if start is None:
-        start_dt = lldb.most_recent().index[0].to_pydatetime()
+        try:
+            start_dt = lldb.most_recent().index[0].to_pydatetime()
+        except IndexError:
+            start_dt = dt.now(pytz.UTC) - timedelta(days=1)
     else:
         start_dt = pd.to_datetime(start, utc=True).to_pydatetime()
 
     if end is None:
-        end_dt = dt.utcnow()
+        end_dt = dt.now(pytz.UTC)
     else:
         end_dt = pd.to_datetime(end, utc=True).to_pydatetime()
 
