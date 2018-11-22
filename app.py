@@ -72,12 +72,12 @@ def update_db(start, end):
         try:
             start_dt = lldb.most_recent().index[0].to_pydatetime()
         except IndexError:
-            start_dt = dt.now(pytz.UTC) - timedelta(days=1)
+            start_dt = dt.utcnow() - timedelta(days=1)
     else:
         start_dt = pd.to_datetime(start, utc=True).to_pydatetime()
 
     if end is None:
-        end_dt = dt.now(pytz.UTC)
+        end_dt = dt.utcnow()
     else:
         end_dt = pd.to_datetime(end, utc=True).to_pydatetime()
 
