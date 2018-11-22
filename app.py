@@ -26,8 +26,10 @@ def main():
     lakes = ['mendota', 'monona', 'waubesa', 'kegonsa']
     is_high = []
     streaks = []
+    total_high = []
     for lake in lakes:
         df_lake = df[lake].dropna()
+        total_high.append((df_lake > req_maxes[lake]).sum())
         is_high.append(df_lake.iloc[-1] > req_maxes[lake])
         below_level_times = df_lake[df_lake <= req_maxes[lake]].index
         above_level_times = df_lake[df_lake > req_maxes[lake]].index
@@ -48,7 +50,8 @@ def main():
         is_high,
         streaks,
         df[lakes].iloc[-1, :].tolist(),
-        req_maxes[lakes].tolist()
+        req_maxes[lakes].tolist(),
+        total_high
     )
     return flask.render_template('main.html', info=info)
 
