@@ -6,5 +6,6 @@ BeautifulSoup4>=4.6
 psycopg2-binary>=2.7
 pytest>=3.8
 pytest-cov>=2.6
+pytz
 flask==1.0.2
 gunicorn

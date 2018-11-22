@@ -4,6 +4,7 @@ import functools
 import time
 
 import requests
+import pytz
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
@@ -135,7 +136,9 @@ def backfill(start: datetime, end: datetime, lldb: LakeLevelDB, verbose=False):
         # be kind to the servers
         time.sleep(0.01)
         df = scrape(start, min(start + step, end))
+        df.index = df.index.tz_convert(pytz.timezone('US/Central'))
         df = df.resample('1D').max()
+        df.index = df.index.date
         lldb.insert(df)
         start += step
         if verbose:

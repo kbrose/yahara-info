@@ -60,7 +60,7 @@ class LakeLevelDB():
         Inputs
         ------
         df : pd.DataFrame
-            DataFrame with a datetime row index and four columns
+            DataFrame with a datetime.date row index and four columns
             with names ['mendota', 'monona', 'waubesa', 'kegonsa']
         replace : bool
             If truthy, some values may be replaced if the value in
@@ -82,7 +82,6 @@ class LakeLevelDB():
         select_cmd = "SELECT * FROM levels WHERE datetime=%s;"
 
         for time, row in df.iterrows():
-            time = time.to_pydatetime()
             if replace:
                 self._cursor.execute(select_cmd, (time,))
                 result = self._cursor.fetchone()
