@@ -60,8 +60,8 @@ def main():
         total_high
     )
     f, ax = plt.subplots(figsize=(12, 8))
-    axs = df.plot(subplots=True, ax=ax, sharex=True, fontsize=16)
-    for _ax in axs:
+    axs = df.plot(subplots=False, ax=ax, sharex=True, fontsize=16)
+    for _ax in [axs]:
         _ax.set_xlabel('')
     fig_as_html = mpld3.fig_to_html(f)
     return flask.render_template('main.html', info=info, figure=fig_as_html)
