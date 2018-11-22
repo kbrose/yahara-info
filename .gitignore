@@ -2,4 +2,5 @@
 .mypy_cache*
 .pytest_cache*
 .coverage
+.vscode
 madison_lake_levels/data/*.db
