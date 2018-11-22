@@ -6,8 +6,14 @@ import io
 import flask
 import pandas as pd
 import pytz
+import matplotlib as mpl
+import mpld3
 
 import madison_lake_levels as mll
+
+mpl.use('Agg')
+
+import matplotlib.pyplot as plt
 
 app = flask.Flask(__name__)
 
@@ -53,7 +59,12 @@ def main():
         req_maxes[lakes].tolist(),
         total_high
     )
-    return flask.render_template('main.html', info=info)
+    f, ax = plt.subplots(figsize=(12, 8))
+    axs = df.plot(subplots=True, ax=ax, sharex=True, fontsize=16)
+    for _ax in axs:
+        _ax.set_xlabel('')
+    fig_as_html = mpld3.fig_to_html(f)
+    return flask.render_template('main.html', info=info, figure=fig_as_html)
 
 
 @app.route('/db')
