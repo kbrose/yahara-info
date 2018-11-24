@@ -91,13 +91,13 @@ def plot():
         levels.append(p.line(df.index, df[lake], color=color, line_width=2,
                              muted_alpha=0.2, muted_color=color))
         maxes.append(p.line([df.index.min(), df.index.max()],
-                     2 * [req_levels.loc[lake, 'summer_maximum']],
-                     color=color,
-                     line_width=2,
-                     line_dash=[5, 5],
-                     line_alpha=0.5,
-                     muted_alpha=0.1,
-                     muted_color=color))
+                            2 * [req_levels.loc[lake, 'summer_maximum']],
+                            color=color,
+                            line_width=2,
+                            line_dash=[5, 5],
+                            line_alpha=0.5,
+                            muted_alpha=0.1,
+                            muted_color=color))
     _msg = p.circle([], [], color='#ffffff')
     legend_items = [('Click to fade', [_msg])]
     for lake, level, _max in zip(df.columns, levels, maxes):
