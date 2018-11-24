@@ -2,8 +2,8 @@
 {% block content %}
 <div class="row">
 {% for lake, is_high, streak, curr_height, max_allowed, total_high in info %}
-        <div class="col s12 m6">
-        <div class="card-panel {% if is_high %}cyan{% else %}blue-grey{% endif %} lighten-2">
+    <div class="col s12 m6">
+        <div class="card-panel small {% if is_high %}cyan{% else %}blue-grey{% endif %} lighten-2">
             <span class="white-text">
                 {% if is_high %}
                     <h4>{{ lake }} is too high.</h4>
@@ -22,9 +22,31 @@
                 {% endif %}
             </span>
         </div>
-        </div>
+    </div>
 {% endfor %}
 </div>
-<h2>What does this mean?</h1>
-It means something.
+<div class="container">
+    <h3>What does this mean?</h3>
+    <p>
+        In 1979 the State of Wisconsin Department of Natural Resources (DNR) issued several orders that together set the maximum and minimum levels of Lakes <a href="https://lwrd.countyofdane.com/documents/pdf/DNR-3-SD-77-808.pdf">Mendota</a>, <a href="https://lwrd.countyofdane.com/documents/pdf/DNR-3-SD-77-819.pdf">Monona</a>, <a href="https://lwrd.countyofdane.com/documents/pdf/DNR-3-SD-77-819.pdf">Waubesa</a>, and <a href="https://pdf.countyofdane.com/lwrd/landconservation/DNR-3-WR-1116.pdf">Kegonsa</a>.
+    </p>
+    <p class="container center">
+        <img src="/static/imgs/dnr-order.png" alt="Image of the DNR order setting Mendota's levels." class="responsive-img" style="border: solid 1px grey;">
+        <i>Snippet from DNR-3-SD-77-808, creating the requirements for Lake Mendota.</i>
+    </p>
+    <p>
+        Despite these orders, the lake levels have consistently been higher than required. From October 2007 through November 2018 Lake Mendota has spent 1,323 of 3,946 days (i.e. 33.6%, about one third) above its maximum height. On the other hand, Mendota has been below its minimum level for only 332 days (8.4%). The other lakes were similar – Monona was too high 44.2% of the time and too low 8.0% of the time, Waubesa was 39.6% too high vs. 7.4% too low, and Kegonsa 27.7% too high vs. 7.6% too low.
+    </p>
+    <p class="center">
+        <img src="/static/imgs/timeline.png" alt="A timeline of when the lakes are above their maximums." class="responsive-img">
+        <i>A timeline showing when each lake is above its maximum level.</i>
+    </p>
+    <p>
+        It seems like there has been no effort to enforce the maximum lake levels, at least on the maximum side. But even if there were enforcement, Mendota's Summer operating requirements leave only six inches between minimum and maximum. In comparison, the rainfall on August 20th, 2018 caused Mendota to rise a full 16 inches. Getting a lake down to a compliant level is also not as simple as flipping a switch and letting the water out. Slow river flow and drainage means at least one of the lakes is going to be too high in the case of large rainfall.
+    </p>
+    <p class="container center">
+        <img src="/static/imgs/dam.jpg" alt="A picture of Tenney Park Lock and Dam." class="responsive-img">
+        <i>The Tenney Park Lock and Dam. Photo taken on August 26, 2018 by Kevin Rose.</i>
+    </p>
+</div>
 {% endblock %}
