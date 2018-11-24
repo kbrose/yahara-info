@@ -9,5 +9,4 @@ pytest-cov>=2.6
 pytz
 flask==1.0.2
 gunicorn
-matplotlib==3.0.2
-mpld3==0.3
+bokeh==1.0.1
