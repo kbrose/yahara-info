@@ -4,3 +4,4 @@
 .coverage
 .vscode
 madison_lake_levels/data/*.db
+*.DS_Store
