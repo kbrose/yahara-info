@@ -1,13 +1,18 @@
 <html>
-    <head>
-            <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/materialize.css') }}">
-    </head>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/materialize.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/bokeh.min.css') }}">
+    <script src="{{ url_for('static',filename='scripts/bokeh.min.js') }}"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    {{ bokeh_script|safe }}
+</head>
 <title>Madison Lake Levels</title>
 
 <div class="container">
-<h1 class="center-align">Madison Lake Levels</h1>
+    <h1 class="center-align">Madison Lake Levels</h1>
 
-{% block content %}
-{% endblock %}
+    {% block content %}
+    {% endblock %}
 </div>
 </html>
