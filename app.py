@@ -6,14 +6,13 @@ import io
 import flask
 import pandas as pd
 import pytz
-import matplotlib as mpl
-import mpld3
+import bokeh
+from bokeh.embed import components
+from bokeh.plotting import figure
+from bokeh.palettes import Set2_5 as palette
+from bokeh.models import Legend
 
 import madison_lake_levels as mll
-
-mpl.use('Agg')
-
-import matplotlib.pyplot as plt
 
 app = flask.Flask(__name__)
 
@@ -59,12 +58,7 @@ def main():
         req_maxes[lakes].tolist(),
         total_high
     )
-    f, ax = plt.subplots(figsize=(12, 8))
-    axs = df.plot(subplots=False, ax=ax, sharex=True, fontsize=16)
-    for _ax in [axs]:
-        _ax.set_xlabel('')
-    fig_as_html = mpld3.fig_to_html(f)
-    return flask.render_template('main.html', info=info, figure=fig_as_html)
+    return flask.render_template('main.html', info=info)
 
 
 @app.route('/db')
@@ -76,6 +70,39 @@ def database_dump():
         attachment_filename='madison_lake_levels.csv',
         as_attachment=True
     )
+
+
+@app.route('/plot')
+def plot():
+    df = lldb.to_df()
+    req_levels = mll.required_levels.required_levels
+
+    p = figure(title="Madison Lake Levels",
+               x_axis_label='date',
+               x_axis_type='datetime',
+               y_axis_label='Lake Height (feet above sea level)',
+               tools="pan,wheel_zoom,box_zoom,reset,previewsave",
+               sizing_mode='scale_width')
+    p.plot_height=400
+
+    levels = []
+    maxes = []
+    for lake, color in zip(df.columns, palette):
+        levels.append(p.line(df.index, df[lake], color=color, line_width=2))
+        maxes.append(p.line([df.index.min(), df.index.max()],
+                     2 * [req_levels.loc[lake, 'summer_maximum']],
+                     color=color,
+                     line_width=2,
+                     line_dash=[5, 5],
+                     line_alpha=0.5))
+    legend_items = []
+    for lake, level, _max in zip(df.columns, levels, maxes):
+        legend_items.extend([(lake, [level]), (lake + ' max height', [_max])])
+    legend = Legend(items=legend_items, location=(0, 0))
+    p.add_layout(legend, 'left')
+
+    script, div = components(p)
+    return flask.render_template('plot.html', bokeh_script=script, plot_div=div)
 
 
 @app.route('/update/', defaults={'start': None, 'end': None},
