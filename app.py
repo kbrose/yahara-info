@@ -94,13 +94,14 @@ def plot():
                             color=color,
                             line_width=2,
                             line_dash=[5, 5],
-                            line_alpha=0.5,
+                            line_alpha=0.8,
                             muted_alpha=0.1,
                             muted_color=color))
     _msg = p.circle([], [], color='#ffffff')
     legend_items = [('Click to fade', [_msg])]
     for lake, level, _max in zip(df.columns, levels, maxes):
-        legend_items.extend([(lake, [level]), (lake + ' max height', [_max])])
+        lake = lake.title()
+        legend_items.extend([(lake, [level]), (lake + ' max', [_max])])
     legend = Legend(items=legend_items, location=(0, 0))
     legend.click_policy = 'mute'
     p.add_layout(legend, 'left')
