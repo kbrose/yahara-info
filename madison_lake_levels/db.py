@@ -1,4 +1,3 @@
-import os
 from functools import wraps
 import re
 
@@ -125,7 +124,7 @@ class LakeLevelDB():
         return df
 
 
-def config_from_dburl(db_url):
+def config_from_dburl(db_url) -> dict:
     """
     Return configuration that can be passed to
     LakeLevelDB. Primary use case is parsing the DATABASE_URL
