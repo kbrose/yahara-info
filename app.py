@@ -5,8 +5,6 @@ import io
 
 import flask
 import pandas as pd
-import pytz
-import bokeh
 from bokeh.embed import components
 from bokeh.plotting import figure
 from bokeh.palettes import Set2_5 as palette
@@ -19,6 +17,7 @@ app = flask.Flask(__name__)
 lldb = mll.db.LakeLevelDB(
     **mll.db.config_from_dburl(os.getenv('DATABASE_URL'))
 )
+
 
 @app.route('/')
 def main():
@@ -83,7 +82,7 @@ def plot():
                y_axis_label='Lake Height (feet above sea level)',
                tools="pan,wheel_zoom,box_zoom,reset,previewsave",
                sizing_mode='scale_width')
-    p.plot_height=400
+    p.plot_height = 400
 
     levels = []
     maxes = []
@@ -107,7 +106,8 @@ def plot():
     p.add_layout(legend, 'left')
 
     script, div = components(p)
-    return flask.render_template('plot.html', bokeh_script=script, plot_div=div)
+    return flask.render_template('plot.html', bokeh_script=script,
+                                 plot_div=div)
 
 
 @app.route('/update/', defaults={'start': None, 'end': None},
