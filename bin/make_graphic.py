@@ -20,12 +20,13 @@ def main():
         x = (df[name] > req.loc[name, 'summer_maximum']).astype(float)
         x[x == 0] = np.nan
         x *= i
-        ax.plot(x, 'k.', label=name, lw=3)
+        ax.plot(x, 'k.', label=name, markersize=8, markeredgewidth=1,
+                markeredgecolor='#333333', marker='|')
     ax.set_yticks(range(df.shape[1]))
     ax.set_yticklabels(df.columns)
     ax.set_ylim([-1, df.shape[1]])
     ax.set_xticks([datetime(year, 1, 1) for year in range(2008, 2019)])
-    ax.xaxis.grid()
+    ax.grid()
     for child in ax.get_children():
         if isinstance(child, matplotlib.spines.Spine):
             child.set_color('#cccccc')
