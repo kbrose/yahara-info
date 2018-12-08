@@ -7,14 +7,13 @@
                 <th>Lake</th>
                 <th>Status</th>
                 <th>Distance from max</th>
-                <th>Days above max since Oct. 2007</th>
             </tr>
         </thead>
         <tbody>
             {% for lake, is_high, streak, curr_height, max_allowed, total_high in info %}
-                <tr {% if is_high %}class="red lighten-5"{% endif %}>
+                <tr {% if is_high %}class="red lighten-5 bold" style="font-weight: bold"{% endif %}>
                     <td>{{ lake }}</td>
-                    <td>{% if is_high %}<b>Too high</b>{% else %}Compliant{% endif %}</td>
+                    <td>{% if is_high %}Too high{% else %}Compliant{% endif %}</td>
                     <td>
                         {% if is_high %}
                         {{ '%0.2f'| format(curr_height - max_allowed|float) }} feet above max
@@ -22,7 +21,6 @@
                         {{ '%0.2f'| format(max_allowed - curr_height|float) }} feet below max
                         {% endif %}
                     </td>
-                    <td>{{ total_high }}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -46,7 +44,7 @@
         <figcaption>A timeline showing when each lake is above its maximum level.</figcaption>
     </figure>
     <p>
-        The lake levels are controlled by Dane County Parks by several dams. Even if Dane County wanted to keep the lake levels compliant, Mendota's Summer requirements leave only six inches between minimum and maximum. In comparison, the rainfall in August 2018 caused Mendota to rise a full 16 inches. Getting a lake down to a compliant level is also not as simple as flipping a switch and letting the water out. Slow river flow and drainage makes reducing water levels a slow, and sometimes painful, process.
+        Dane County Parks controls the lake levels with several dams. Even if Dane County wanted to keep the lake levels compliant, Mendota's Summer requirements leave only six inches between minimum and maximum. In comparison, the rainfall in August 2018 caused Mendota to rise a full 16 inches. Getting a lake down to a compliant level is also not as simple as flipping a switch and letting the water out. Slow river flow and drainage makes reducing water levels a slow, and sometimes painful, process.
     </p>
     <figure class="container center section">
         <img src="/static/imgs/dam.jpg" alt="A picture of Tenney Park Lock and Dam." class="responsive-img">
