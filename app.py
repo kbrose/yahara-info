@@ -57,7 +57,15 @@ def main():
         req_maxes[lakes].tolist(),
         total_high
     )
-    return flask.render_template('main.html', info=info)
+    high_lakes = [lake.title() for lake, high in zip(lakes, is_high) if high]
+    if not high_lakes:
+        high_lakes = 'All lakes are below their state-required maximum.'
+    elif len(high_lakes) == 1:
+        high_lakes = f'{high_lakes[0]} is above its state-required maximum.'
+    else:
+        high_lakes = ', '.join(high_lakes[:-1]) + f', and {high_lakes[-1]}'
+        high_lakes += ' are above their state-required maximums.'
+    return flask.render_template('main.html', info=info, high_lakes=high_lakes)
 
 
 @app.route('/db')

@@ -1,17 +1,40 @@
 <html>
-
 <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/materialize.css') }}">
+    <script src="{{ url_for('static',filename='scripts/materialize.min.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/bokeh.min.css') }}">
     <script src="{{ url_for('static',filename='scripts/bokeh.min.js') }}"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     {{ bokeh_script|safe }}
 </head>
-<div class="container">
 <title>Madison Lake Levels</title>
-    <h1 class="center-align">Madison Lake Levels</h1>
-
+<header>
+    <nav>
+        <div class="nav-wrapper blue-grey darken-2 white-text">
+            <div class="container">
+                <div class="container">
+                    <a href="/" class="brand-logo">Madison Lake Levels</a>
+                    <ul class="right">
+                        <li><a href="/"><i class="material-icons left">home</i>Home</a></li>
+                        <li><a href="/plot"><i class="material-icons left">show_chart</i>View Data</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- <h1 class="center-align">Madison Lake Levels</h1> -->
+        </div>
+    </nav>
+</header>
+<main class="container">
     {% block content %}
     {% endblock %}
-</div>
+</main>
+<footer class="page-footer blue-grey darken-2 white-text">
+    <div class="container">
+        <div class="container">
+            The code behind this website is open source, and can be found on <a href="https://www.github.com/kbrose/madison-lake-levels/" class="blue-text text-lighten-4">GitHub</a>.
+            <br>
+            This website utilizes data taken from the <a href="https://waterservices.usgs.gov" class="blue-text text-lighten-4">United States Geological Survey</a>.
+        </div>
+    </div>
+</footer>
 </html>

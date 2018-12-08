@@ -1,30 +1,52 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-    <table>
-        <thead>
-            <tr>
-                <th>Lake</th>
-                <th>Status</th>
-                <th>Distance from max</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for lake, is_high, streak, curr_height, max_allowed, total_high in info %}
-                <tr {% if is_high %}class="red lighten-5 bold" style="font-weight: bold"{% endif %}>
-                    <td>{{ lake }}</td>
-                    <td>{% if is_high %}Too high{% else %}Compliant{% endif %}</td>
-                    <td>
-                        {% if is_high %}
-                        {{ '%0.2f'| format(curr_height - max_allowed|float) }} feet above max
-                        {% else %}
-                        {{ '%0.2f'| format(max_allowed - curr_height|float) }} feet below max
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="card hoverable">
+        <div class="card-image waves-effect waves-block waves-light">
+            <img class="activator" src="static/imgs/sat-lakes.jpg">
+        </div>
+        <div class="card-content activator">
+            <span class="card-title activator">
+                <div class="row">
+                    <div class="col s11 card-title activator">{{ high_lakes }}</div>
+                    <div class="col s1 card-title activator">⋮</div>
+                    <div class="col s12 activator card-title" style="font-size: 70%;">Click for details</div>
+                </div>
+            </span>
+        </div>
+        <div class="card-reveal">
+            <span class="card-title">
+                <div class="row">
+                    <div class="col s11 card-title">{{ high_lakes }}</div>
+                    <div class="col s1 card-title">✕</div>
+                </div>
+            </span>
+            <table class="">
+                <thead style="font-size: 120%;">
+                    <tr>
+                        <th>Lake</th>
+                        <th>Status</th>
+                        <th>Distance from max</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lake, is_high, streak, curr_height, max_allowed, total_high in info %}
+                        <tr {% if is_high %}class="red lighten-5 bold" style="font-weight: bold"{% endif %}>
+                            <td>{{ lake }}</td>
+                            <td>{% if is_high %}Too high{% else %}Compliant{% endif %}</td>
+                            <td>
+                                {% if is_high %}
+                                {{ '%0.2f'| format(curr_height - max_allowed|float) }} feet above max
+                                {% else %}
+                                {{ '%0.2f'| format(max_allowed - curr_height|float) }} feet below max
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     <a href="/plot" class="section">Explore the complete dataset from October 2007 to the present as an interactive graph.</a>
     <h3>What does this mean?</h3>
     <p>
@@ -41,7 +63,7 @@
     </p>
     <figure class="center section">
         <img src="/static/imgs/timeline.png" alt="A timeline of when the lakes are above their maximums." class="responsive-img">
-        <figcaption>A timeline showing when each lake is above its maximum level.</figcaption>
+        <figcaption>A timeline showing when each lake is above its maximum level. <a href="/plot" class="section">Explore the complete dataset.</a></figcaption>
     </figure>
     <p>
         Dane County Parks controls the lake levels with several dams. Even if Dane County wanted to keep the lake levels compliant, Mendota's Summer requirements leave only six inches between minimum and maximum. In comparison, the rainfall in August 2018 caused Mendota to rise a full 16 inches. Getting a lake down to a compliant level is also not as simple as flipping a switch and letting the water out. Slow river flow and drainage makes reducing water levels a slow, and sometimes painful, process.
