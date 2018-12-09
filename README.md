@@ -50,4 +50,6 @@ flask run
 
 The webapp is deployed to Heroku. It can be found at https://madison-lake-levels.herokuapp.com/.
 
+A free-tier of a database on Heroku is used to persist the data.
+
 A daily cron job runs that updates the database. The job is created using [Heroku Scheduler](https://devcenter.heroku.com/articles/scheduler), and hits a simple API route on the web-app that causes an update.
