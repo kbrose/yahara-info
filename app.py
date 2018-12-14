@@ -29,33 +29,14 @@ def main():
     req_maxes = req_levels['summer_maximum']
     lakes = ['mendota', 'monona', 'waubesa', 'kegonsa']
     is_high = []
-    streaks = []
-    total_high = []
     for lake in lakes:
         df_lake = df[lake].dropna()
-        total_high.append((df_lake > req_maxes[lake]).sum())
         is_high.append(df_lake.iloc[-1] > req_maxes[lake])
-        below_level_times = df_lake[df_lake <= req_maxes[lake]].index
-        above_level_times = df_lake[df_lake > req_maxes[lake]].index
-        if is_high[-1]:
-            if below_level_times.size:
-                time_above = df_lake.index[-1] - below_level_times.max()
-                streaks.append(time_above.days)
-            else:
-                streaks.append('a good number of')
-        else:
-            if above_level_times.size:
-                time_below = df_lake.index[-1] - above_level_times.max()
-                streaks.append(time_below.days)
-            else:
-                streaks.append('a good number of')
     info = zip(
         [lake.title() for lake in lakes],
         is_high,
-        streaks,
         df[lakes].iloc[-1, :].tolist(),
         req_maxes[lakes].tolist(),
-        total_high
     )
     high_lakes = [lake.title() for lake, high in zip(lakes, is_high) if high]
     if not high_lakes:

@@ -5,6 +5,10 @@
     <div class="card hoverable">
         <div class="card-image waves-effect waves-block waves-light">
             <img class="activator" src="static/imgs/sat-lakes.jpg">
+            {% if "Mendota" in high_lakes %}<img class="activator overlay-lake" src="static/imgs/mendota-overlay.png"> {% endif %}
+            {% if "Monona" in high_lakes %}<img class="activator overlay-lake" src="static/imgs/monona-overlay.png"> {% endif %}
+            {% if "Waubesa" in high_lakes %}<img class="activator overlay-lake" src="static/imgs/waubesa-overlay.png"> {% endif %}
+            {% if "Kegonsa" in high_lakes %}<img class="activator overlay-lake" src="static/imgs/kegonsa-overlay.png"> {% endif %}
         </div>
         <div class="card-content card-title activator">
             <span class="card-title activator">
@@ -32,7 +36,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for lake, is_high, streak, curr_height, max_allowed, total_high in info %}
+                    {% for lake, is_high, curr_height, max_allowed in info %}
                         <tr {% if is_high %}class="red lighten-5 bold" style="font-weight: bold"{% endif %}>
                             <td>{{ lake }}</td>
                             <td>{% if is_high %}Too high{% else %}Compliant{% endif %}</td>
