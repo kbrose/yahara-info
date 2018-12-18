@@ -9,6 +9,8 @@ from bokeh.embed import components
 from bokeh.plotting import figure
 from bokeh.palettes import Set2_5 as palette
 from bokeh.models import Legend
+from bokeh.io import output_file, show
+from bokeh.models.widgets import Panel, Tabs
 
 import madison_lake_levels as mll
 
@@ -65,13 +67,16 @@ def plot():
     df = lldb.to_df()
     req_levels = mll.required_levels.required_levels
 
+    width = 1200
+    height = 700
+
     p = figure(title="Madison Lake Levels",
                x_axis_label='date',
                x_axis_type='datetime',
                y_axis_label='Lake Height (feet above sea level)',
                tools="pan,wheel_zoom,box_zoom,reset,previewsave",
-               sizing_mode='scale_width')
-    p.plot_height = 400
+               plot_width=width,
+               plot_height=height)
 
     levels = []
     maxes = []
@@ -95,7 +100,67 @@ def plot():
     legend.click_policy = 'mute'
     p.add_layout(legend, 'left')
 
-    script, div = components(p)
+    p2 = figure(title="Madison Lake Levels - difference from state max",
+                x_axis_label='date',
+                x_axis_type='datetime',
+                y_axis_label='Lake Height (feet above State Max)',
+                tools="pan,wheel_zoom,box_zoom,reset,previewsave",
+                plot_width=width,
+                plot_height=height)
+
+    levels = []
+    for lake, color in zip(df.columns, palette):
+        levels.append(p2.line(df.index,
+                              df[lake] - req_levels.loc[lake, 'summer_maximum'],
+                              color=color, line_width=2,
+                              muted_alpha=0.2, muted_color=color))
+    _msg = p2.circle([], [], color='#ffffff')
+    legend_items = [('Click to fade', [_msg])]
+    legend_items.append((
+        'State Max',
+        [p2.line([df.index.min(), df.index.max()],
+                 [0, 0],
+                 color='black',
+                 muted_alpha=0.1,
+                 line_dash=[5, 5])]
+    ))
+    for lake, level in zip(df.columns, levels):
+        lake = lake.title()
+        legend_items.append((lake, [level]))
+    legend = Legend(items=legend_items, location=(0, 0))
+    legend.click_policy = 'mute'
+    p2.add_layout(legend, 'left')
+
+    p3 = figure(title="Madison Lake Levels - daily change in height",
+                x_axis_label='date',
+                x_axis_type='datetime',
+                y_axis_label='Change in height from day before (feet/day)',
+                tools="pan,wheel_zoom,box_zoom,reset,previewsave",
+                plot_width=width,
+                plot_height=height)
+
+    levels = []
+    for lake, color in zip(df.columns, palette):
+        levels.append(p3.line(df.index[1:],
+                              df[lake].diff(),
+                              color=color, line_width=2,
+                              muted_alpha=0.2, muted_color=color))
+    _msg = p3.circle([], [], color='#ffffff')
+    legend_items = [('Click to fade', [_msg])]
+    for lake, level in zip(df.columns, levels):
+        lake = lake.title()
+        legend_items.append((lake, [level]))
+    legend = Legend(items=legend_items, location=(0, 0))
+    legend.click_policy = 'mute'
+    p3.add_layout(legend, 'left')
+
+    tab1 = Panel(child=p, title="Absolute levels")
+    tab2 = Panel(child=p2, title='Levels compared to state maximum')
+    tab3 = Panel(child=p3, title='Change in levels')
+
+    tabs = Tabs(tabs=[tab1, tab2, tab3])
+
+    script, div = components(tabs)
     return flask.render_template('plot.html', bokeh_script=script,
                                  plot_div=div)
 
