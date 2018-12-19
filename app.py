@@ -21,9 +21,7 @@ lldb = mll.db.LakeLevelDB(
 )
 
 
-@app.route('/')
-def main():
-    df = lldb.to_df()
+def _main_page(df):
     if not df.size:
         return flask.render_template('main.html', info=[])
     df = df.sort_index()
@@ -49,6 +47,19 @@ def main():
         high_lakes = ', '.join(high_lakes[:-1]) + f', and {high_lakes[-1]}'
         high_lakes += ' are above their state-required maximums.'
     return flask.render_template('main.html', info=info, high_lakes=high_lakes)
+
+
+@app.route('/')
+def main():
+    df = lldb.to_df()
+    return _main_page(df)
+
+
+@app.route('/date/<date>')
+def specific_date(date):
+    df = lldb.to_df()
+    df = df[df.index < pd.to_datetime(date)]
+    return _main_page(df)
 
 
 @app.route('/db')
