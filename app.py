@@ -9,7 +9,6 @@ from bokeh.embed import components
 from bokeh.plotting import figure
 from bokeh.palettes import Set2_5 as palette
 from bokeh.models import Legend
-from bokeh.io import output_file, show
 from bokeh.models.widgets import Panel, Tabs
 
 import madison_lake_levels as mll
@@ -21,9 +20,7 @@ lldb = mll.db.LakeLevelDB(
 )
 
 
-def _main_page(df):
-    if not df.size:
-        return flask.render_template('main.html', info=[])
+def _main_page(df, date=''):
     df = df.sort_index()
     req_levels = mll.required_levels.required_levels
     req_maxes = req_levels['summer_maximum']
@@ -31,6 +28,13 @@ def _main_page(df):
     is_high = []
     for lake in lakes:
         df_lake = df[lake].dropna()
+        if not df_lake.size:
+            return flask.render_template(
+                'main.html',
+                info=[],
+                high_lakes='No data available at this time.',
+                date=date
+            )
         is_high.append(df_lake.iloc[-1] > req_maxes[lake])
     info = zip(
         [lake.title() for lake in lakes],
@@ -46,7 +50,9 @@ def _main_page(df):
     else:
         high_lakes = ', '.join(high_lakes[:-1]) + f', and {high_lakes[-1]}'
         high_lakes += ' are above their state-required maximums.'
-    return flask.render_template('main.html', info=info, high_lakes=high_lakes)
+    return flask.render_template(
+        'main.html', info=info, high_lakes=high_lakes, date=date
+    )
 
 
 @app.route('/')
@@ -58,8 +64,11 @@ def main():
 @app.route('/date/<date>')
 def specific_date(date):
     df = lldb.to_df()
-    df = df[df.index < pd.to_datetime(date)]
-    return _main_page(df)
+    date = pd.to_datetime(date)
+    df = df[df.index < date]
+    return _main_page(
+        df, date=f'<h5>Status on {date.strftime(r"%b %d, %Y")}</h5>'
+    )
 
 
 @app.route('/db')
