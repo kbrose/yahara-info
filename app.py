@@ -36,11 +36,14 @@ def _main_page(df, date=''):
                 date=date
             )
         is_high.append(df_lake.iloc[-1] > req_maxes[lake])
+    total_diff = (df[lakes].iloc[-1, :] - req_maxes[lakes]).abs()
+    feet_diff = total_diff.astype(int)
+    inches_diff = (total_diff - feet_diff) * 12
     info = zip(
         [lake.title() for lake in lakes],
         is_high,
-        df[lakes].iloc[-1, :].tolist(),
-        req_maxes[lakes].tolist(),
+        feet_diff.tolist(),
+        inches_diff.tolist(),
     )
     high_lakes = [lake.title() for lake, high in zip(lakes, is_high) if high]
     if not high_lakes:
@@ -65,7 +68,7 @@ def main():
 def specific_date(date):
     df = lldb.to_df()
     date = pd.to_datetime(date)
-    df = df[df.index < date]
+    df = df[df.index <= date]
     return _main_page(
         df, date=f'<h5>Status on {date.strftime(r"%b %d, %Y")}</h5>'
     )
