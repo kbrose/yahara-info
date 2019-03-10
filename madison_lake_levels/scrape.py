@@ -71,9 +71,10 @@ def scrape(start: Union[datetime, None]=None,
     for ts in d['value']['timeSeries']:
         lake_name = _format_usgs_lake_names(ts['sourceInfo']['siteName'])
         values = ts['values'][0]['value']
+        null_value = ts['variable']['noDataValue']
+        values = [v for v in values if float(v['value']) != null_value]
         gage_heights = [float(v['value']) for v in values]
         times = [v['dateTime'] for v in values]
-        assert len(times) == len(gage_heights)
         df[lake_name] = pd.Series(dict(zip(times, gage_heights)))
 
     for lake_name in lake_name_to_usgs_site_num.keys():
@@ -95,8 +96,8 @@ def get_datum_elevation(sites: str) -> pd.DataFrame:
     """
     Given a comma separated list of site numbers, return the datum
     elevations of those sites. From what I can tell, this is the base
-    height of the sensor that records lake levls, so the total height
-    of the lake level is the sum of the datum elevation and the sensor reading.
+    height of the sensor that records lake levls, so the total height of
+    the lake level is the sum of the datum elevation and the sensor reading.
 
     This function is cached since the rate at which these values change has
     historically been on the order of decades.

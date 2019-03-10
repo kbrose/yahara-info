@@ -26,6 +26,7 @@ def _main_page(df, date=''):
     req_maxes = req_levels['summer_maximum']
     lakes = ['mendota', 'monona', 'waubesa', 'kegonsa']
     is_high = []
+    heights = []
     for lake in lakes:
         df_lake = df[lake].dropna()
         if not df_lake.size:
@@ -35,8 +36,9 @@ def _main_page(df, date=''):
                 high_lakes='No data available at this time.',
                 date=date
             )
+        heights.append(df_lake.iloc[-1])
         is_high.append(df_lake.iloc[-1] > req_maxes[lake])
-    total_diff = (df[lakes].iloc[-1, :] - req_maxes[lakes]).abs()
+    total_diff = abs(pd.Series(dict(zip(lakes, heights))) - req_maxes[lakes])
     feet_diff = total_diff.astype(int)
     inches_diff = (total_diff - feet_diff) * 12
     info = zip(

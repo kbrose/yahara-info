@@ -87,7 +87,10 @@ class LakeLevelDB():
                 update_cmd = update_cmd_static
                 if result:
                     for lake, height in zip(self._columns[1:], result[1:]):
-                        if height < row[lake]:
+                        if (
+                            height < row[lake]
+                            or (pd.isnull(height) and not pd.isnull(row[lake]))
+                        ):
                             update_cmd = update_cmd.format(
                                 columns=f'{lake}={row[lake]}, {{columns}}'
                             )
@@ -103,6 +106,8 @@ class LakeLevelDB():
     def to_df(self) -> pd.DataFrame:
         """
         Return the database as a pandas DataFrame.
+        The datetime column will be set as the index of the DataFrame, and
+        dropped as a column. It will also be converted to a datetime type.
 
         Not for the faint of heart, nor faint of RAM.
         """

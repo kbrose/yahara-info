@@ -86,6 +86,36 @@ class Test_DB():
         lldb.insert(df2)
         assert lldb.most_recent().index[0] == pd.to_datetime('2020-10-01')
 
+    def test_nan_with_no_existing(self):
+        lldb = db.LakeLevelDB(**self.db_config)
+        df = self.example_df.copy()
+        df['mendota'] = float('nan')
+        lldb.insert(df)
+        out_df = lldb.to_df()
+        assert out_df['mendota'].size == 1
+        assert pd.isnull(out_df['mendota'].iloc[0])
+
+    def test_nan_with_existing(self):
+        lldb = db.LakeLevelDB(**self.db_config)
+        df = self.example_df.copy()
+        lldb.insert(df)
+        df['mendota'] = float('nan')
+        lldb.insert(df, replace=True)
+        out_df = lldb.to_df()
+        assert out_df['mendota'].size == 1
+        assert out_df['mendota'].iloc[0] == self.example_df['mendota'].iloc[0]
+
+    def test_replaces_nan(self):
+        lldb = db.LakeLevelDB(**self.db_config)
+        df = self.example_df.copy()
+        df['mendota'] = float('nan')
+        lldb.insert(df)
+        df['mendota'] = 5.0
+        lldb.insert(df, replace=True)
+        out_df = lldb.to_df()
+        assert out_df['mendota'].size == 1
+        assert out_df['mendota'].iloc[0] == 5.0
+
     def test_config_from_env(self):
         c = db.config_from_dburl('postgres://user:password@host:port/database')
         for key in ['user', 'password', 'host', 'port', 'database']:

@@ -1,8 +1,6 @@
 from datetime import datetime as dt
 from datetime import timedelta
 
-import pytest
-
 from madison_lake_levels import scrape
 
 
@@ -16,3 +14,10 @@ class Test_Scrape():
     def test_start_no_end():
         # cannot assert for correctness, only assure no errors are raised
         scrape.scrape(dt.now() - timedelta(hours=25))
+
+    @staticmethod
+    def test_known_null():
+        # This period had an equipment malfunction, reporting values of
+        # -999999
+        df = scrape.scrape(dt(2019, 2, 26), dt(2019, 2, 27))
+        assert df['mendota'].isnull().all()
