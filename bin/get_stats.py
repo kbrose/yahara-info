@@ -9,6 +9,8 @@ def main():
     lldb = mll.db.LakeLevelDB(**mll.db.config_from_dburl(os.getenv('DATABASE_URL')))
     req = mll.required_levels.required_levels
     df = lldb.to_df()
+    df = df.loc[df.index < '2019']
+    df = df.loc[df.index >= '2008-01-01']
     is_summer = (df.index.month >= 3) & (df.index.month < 11)
     df_summer = df.loc[is_summer, :]
     df_winter = df.loc[~is_summer, :]
