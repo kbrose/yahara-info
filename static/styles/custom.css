@@ -2,3 +2,6 @@ img.overlay-lake {
     position: absolute !important;
     opacity: 1;
 }
+.container.body {
+    max-width: 800px;
+}
