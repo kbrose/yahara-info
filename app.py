@@ -97,7 +97,8 @@ def plot():
 
     hover = HoverTool(
         names=[lake.title() for lake in df],
-        tooltips=[('date', '$x{%F}'), ('height above sea level', '$y ft')],
+        tooltips=[('lake', '$name'), ('date', '$x{%F}'),
+                  ('height above sea level', '$y{0.00} ft')],
         formatters={'$x': 'datetime'}
     )
     p = figure(title="Madison Lake Levels",
@@ -112,30 +113,28 @@ def plot():
     levels = []
     maxes = []
     for lake, color in zip(df.columns, palette):
-        levels.append(p.line(df.index, df[lake], color=color, line_width=2,
-                             muted_alpha=0.2, muted_color=color,
-                             name=lake.title()))
+        levels.append(p.line(df.index, df[lake],
+                             color=color, line_width=2, name=lake.title()))
         maxes.append(p.line([df.index.min(), df.index.max()],
                             2 * [req_levels.loc[lake, 'summer_maximum']],
                             color=color,
                             line_width=2,
                             line_dash=[5, 5],
-                            line_alpha=0.8,
-                            muted_alpha=0.1,
-                            muted_color=color))
+                            line_alpha=0.8))
     _msg = p.circle([], [], color='#ffffff')
-    legend_items = [('Click to fade', [_msg])]
+    legend_items = [('Click to hide', [_msg])]
     for lake, level, _max in zip(df.columns, levels, maxes):
         lake = lake.title()
         legend_items.extend([(lake, [level]), (lake + ' max', [_max])])
     legend = Legend(items=legend_items, location=(0, 0))
-    legend.click_policy = 'mute'
+    legend.click_policy = 'hide'
     p.add_layout(legend, 'left')
     tab1 = Panel(child=p, title="Absolute levels")
 
     hover = HoverTool(
         names=[lake.title() for lake in df],
-        tooltips=[('date', '$x{%F}'), ('height compared to max', '$y ft')],
+        tooltips=[('lake', '$name'), ('date', '$x{%F}'),
+                  ('height vs. max', '$y{+0.00} ft')],
         formatters={'$x': 'datetime'}
     )
     p = figure(title="Madison Lake Levels - difference from state max",
@@ -151,23 +150,21 @@ def plot():
     for lake, color in zip(df.columns, palette):
         levels.append(p.line(df.index,
                              df[lake] - req_levels.loc[lake, 'summer_maximum'],
-                             name=lake.title(), color=color, line_width=2,
-                             muted_alpha=0.2, muted_color=color))
+                             name=lake.title(), color=color, line_width=2))
     _msg = p.circle([], [], color='#ffffff')
-    legend_items = [('Click to fade', [_msg])]
+    legend_items = [('Click to hide', [_msg])]
     legend_items.append((
         'State Max',
         [p.line([df.index.min(), df.index.max()],
                 [0, 0],
                 color='black',
-                muted_alpha=0.1,
                 line_dash=[5, 5])]
     ))
     for lake, level in zip(df.columns, levels):
         lake = lake.title()
         legend_items.append((lake, [level]))
     legend = Legend(items=legend_items, location=(0, 0))
-    legend.click_policy = 'mute'
+    legend.click_policy = 'hide'
     p.add_layout(legend, 'left')
 
     tab2 = Panel(child=p, title='Levels compared to state maximum')
