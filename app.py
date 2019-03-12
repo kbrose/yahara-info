@@ -8,7 +8,7 @@ import pandas as pd
 from bokeh.embed import components
 from bokeh.plotting import figure
 from bokeh.palettes import Set2_5 as palette
-from bokeh.models import Legend
+from bokeh.models import Legend, HoverTool
 from bokeh.models.widgets import Panel, Tabs
 
 import madison_lake_levels as mll
@@ -95,19 +95,26 @@ def plot():
     width = 1200
     height = 700
 
+    hover = HoverTool(
+        names=[lake.title() for lake in df],
+        tooltips=[('date', '$x{%F}'), ('height above sea level', '$y ft')],
+        formatters={'$x': 'datetime'}
+    )
     p = figure(title="Madison Lake Levels",
                x_axis_label='date',
                x_axis_type='datetime',
                y_axis_label='Lake Height (feet above sea level)',
-               tools="pan,wheel_zoom,box_zoom,reset,previewsave",
+               tools=["pan,wheel_zoom,box_zoom,reset,previewsave", hover],
                plot_width=width,
                plot_height=height)
+    p.toolbar.logo = None
 
     levels = []
     maxes = []
     for lake, color in zip(df.columns, palette):
         levels.append(p.line(df.index, df[lake], color=color, line_width=2,
-                             muted_alpha=0.2, muted_color=color))
+                             muted_alpha=0.2, muted_color=color,
+                             name=lake.title()))
         maxes.append(p.line([df.index.min(), df.index.max()],
                             2 * [req_levels.loc[lake, 'summer_maximum']],
                             color=color,
@@ -126,19 +133,25 @@ def plot():
     p.add_layout(legend, 'left')
     tab1 = Panel(child=p, title="Absolute levels")
 
+    hover = HoverTool(
+        names=[lake.title() for lake in df],
+        tooltips=[('date', '$x{%F}'), ('height compared to max', '$y ft')],
+        formatters={'$x': 'datetime'}
+    )
     p = figure(title="Madison Lake Levels - difference from state max",
                x_axis_label='date',
                x_axis_type='datetime',
                y_axis_label='Lake Height (feet above State Max)',
-               tools="pan,wheel_zoom,box_zoom,reset,previewsave",
+               tools=["pan,wheel_zoom,box_zoom,reset,previewsave", hover],
                plot_width=width,
                plot_height=height)
+    p.toolbar.logo = None
 
     levels = []
     for lake, color in zip(df.columns, palette):
         levels.append(p.line(df.index,
                              df[lake] - req_levels.loc[lake, 'summer_maximum'],
-                             color=color, line_width=2,
+                             name=lake.title(), color=color, line_width=2,
                              muted_alpha=0.2, muted_color=color))
     _msg = p.circle([], [], color='#ffffff')
     legend_items = [('Click to fade', [_msg])]
