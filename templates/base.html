@@ -9,15 +9,16 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/custom.css') }}">
     {{ bokeh_script|safe }}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
-<title>Madison Lake Levels</title>
+<title>Yahara Info</title>
 <header>
     <nav>
         <div class="nav-wrapper blue-grey darken-2 white-text">
             <div class="container body">
-                <a href="/" class="brand-logo left">Madison Lake Levels</a>
+                <a href="/" class="brand-logo left" title="Home page">Yahara Watershed Lake Levels</a>
                 <ul class="right">
-                    <li><a href="/plot"><i class="material-icons left" style="font-size: 40px;">timeline</i>View Data</a></li>
+                    <li><a href="/plot" title="View Data"><i class="material-icons left" style="font-size: 250%;">timeline</i>View Data</a></li>
                 </ul>
             </div>
         </div>
