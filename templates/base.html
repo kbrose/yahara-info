@@ -10,19 +10,32 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/custom.css') }}">
     {{ bokeh_script|safe }}
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems, {});
+      });
+    </script>
 </head>
-<title>Yahara Info</title>
+<title>Yahara Lake Levels</title>
 <header>
-    <nav>
-        <div class="nav-wrapper blue-grey darken-2 white-text">
+    <nav class="blue-grey darken-2 white-text">
+        <div class="nav-wrapper">
             <div class="container body">
-                <a href="/" class="brand-logo left" title="Home page">Yahara Watershed Lake Levels</a>
-                <ul class="right">
-                    <li><a href="/plot" title="View Data"><i class="material-icons left" style="font-size: 250%;">timeline</i>View Data</a></li>
+                <a href="/" class="brand-logo left hide-on-small-only" title="Home page">Yahara Watershed Lake Levels</a>
+                <a href="/" class="brand-logo left hide-on-med-and-up" title="Home page" style="font-size: 130%;">Yahara Watershed Lake Levels</a>
+                <a href="#" data-target="collapsed-sidenav" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="/plot"><i class="material-icons left">timeline</i>View Data</a></li>
+                    <li><a href="/db"><i class="material-icons left">get_app</i>Download Data</a></li>
                 </ul>
             </div>
         </div>
     </nav>
+    <ul class="sidenav" id="collapsed-sidenav">
+        <li><a href="/plot"><i class="material-icons left">timeline</i>View Data</a></li>
+        <li><a href="/db"><i class="material-icons left">get_app</i>Download Data</a></li>
+    </ul>
 </header>
 <main>
     {% block content %}
