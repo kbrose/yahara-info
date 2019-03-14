@@ -48,15 +48,20 @@ def _main_page(df, date=''):
         inches_diff.tolist(),
     )
     high_lakes = [lake.title() for lake, high in zip(lakes, is_high) if high]
-    if not high_lakes:
-        high_lakes = 'All lakes are below their state-required maximum.'
-    elif len(high_lakes) == 1:
-        high_lakes = f'{high_lakes[0]} is above its state-required maximum.'
+    if len(high_lakes) == 1:
+        verb = 'is' if date == '' else 'was'
     else:
-        high_lakes = ', '.join(high_lakes[:-1]) + f', and {high_lakes[-1]}'
-        high_lakes += ' are above their state-required maximums.'
+        verb = 'are' if date == '' else 'were'
+
+    if not high_lakes:
+        msg = f'All lakes {verb} below their state-required maximum.'
+    elif len(high_lakes) == 1:
+        msg = f'{high_lakes[0]} {verb} above its state-required maximum.'
+    else:
+        msg = ', '.join(high_lakes[:-1]) + f', and {high_lakes[-1]}'
+        msg += f' {verb} above their state-required maximums.'
     return flask.render_template(
-        'main.html', info=info, high_lakes=high_lakes, date=date
+        'main.html', info=info, high_lakes=msg, date=date
     )
 
 
