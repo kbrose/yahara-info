@@ -1,5 +1,13 @@
 <html>
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-136318571-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-136318571-1');
+    </script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/materialize.css') }}">
     <script src="{{ url_for('static',filename='scripts/materialize.min.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/bokeh.min.css') }}">
