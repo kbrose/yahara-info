@@ -1,8 +1,8 @@
-![](/static/website-image.png)
+[![](/static/website-image.png)](http://www.yahara.info)
 
-# Madison's lake levels
+# Lake levels from the Yahara Watershed
 
-https://madison-lake-levels.herokuapp.com/
+http://www.yahara.info
 
 Madison Wisconsin and the surrounding Dane County saw near record level rainfalls in late August. Widespread flooding caused over two hundred million dollars in damage ([Associated Press](https://apnews.com/15a2ca91bcb94840bceb192365cf01a1)).
 
