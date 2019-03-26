@@ -5,3 +5,10 @@ img.overlay-lake {
 .container.body {
     max-width: 800px;
 }
+
+.page-footer-padded {
+    margin-top: 1em;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #fff;
+  }
