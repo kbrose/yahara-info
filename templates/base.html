@@ -24,6 +24,7 @@
         var instances = M.Sidenav.init(elems, {});
       });
     </script>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
 </head>
 <title>Yahara Lake Levels</title>
 <header>
@@ -49,7 +50,7 @@
     {% block content %}
     {% endblock %}
 </main>
-<footer class="page-footer blue-grey darken-2 white-text">
+<footer class="page-footer-padded blue-grey darken-2 white-text">
     <div class="container body">
         <a href="/db" class="blue-text text-lighten-4">Download the lake level data</a> used by this website.
         <br>

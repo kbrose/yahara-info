@@ -65,6 +65,11 @@ def _main_page(df, date=''):
     )
 
 
+@app.route('/favicon.png')
+def favicon():
+    return flask.redirect(flask.url_for('static', filename='favicon.png'))
+
+
 @app.route('/')
 def main():
     df = lldb.to_df()
