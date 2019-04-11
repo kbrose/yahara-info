@@ -44,7 +44,7 @@ export FLASK_ENV=development
 flask run
 ```
 
-![](https://travis-ci.com/kbrose/madison-lake-levels.svg?branch=master)
+![](https://travis-ci.com/kbrose/yahara-info.svg?branch=master)
 
 ## Deploy
 
