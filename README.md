@@ -48,7 +48,7 @@ flask run
 
 ## Deploy
 
-The webapp is deployed to Heroku. It can be found at https://madison-lake-levels.herokuapp.com/.
+The webapp is deployed to Heroku. It can be found at http://www.yahara.info.
 
 A free-tier of a database on Heroku is used to persist the data.
 
