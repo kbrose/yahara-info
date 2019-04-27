@@ -10,10 +10,11 @@
     </script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/materialize.css') }}">
     <script src="{{ url_for('static',filename='scripts/materialize.min.js') }}"></script>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/bokeh.min.css') }}">
-    <script src="{{ url_for('static',filename='scripts/bokeh.min.js') }}"></script>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/bokeh-widgets.min.css') }}">
-    <script src="{{ url_for('static',filename='scripts/bokeh-widgets.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/bokeh-1.1.0.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/bokeh-widgets-1.1.0.min.css') }}">
+    <script src="{{ url_for('static',filename='scripts/bokeh-1.1.0.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='scripts/bokeh-widgets-1.1.0.min.js') }}"></script>
+
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/custom.css') }}">
     {{ bokeh_script|safe }}

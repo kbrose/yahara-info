@@ -102,7 +102,6 @@ def plot():
     df = lldb.to_df()
     req_levels = mll.required_levels.required_levels
 
-    width = 1200
     height = 700
 
     hover = HoverTool(
@@ -116,8 +115,8 @@ def plot():
                x_axis_type='datetime',
                y_axis_label='Lake Height (feet above sea level)',
                tools=["pan,wheel_zoom,box_zoom,reset,previewsave", hover],
-               plot_width=width,
-               plot_height=height)
+               height=height,
+               sizing_mode='stretch_width')
     p.toolbar.logo = None
 
     levels = []
@@ -152,8 +151,8 @@ def plot():
                x_axis_type='datetime',
                y_axis_label='Lake Height (feet above State Max)',
                tools=["pan,wheel_zoom,box_zoom,reset,previewsave", hover],
-               plot_width=width,
-               plot_height=height)
+               height=height,
+               sizing_mode='stretch_width')
     p.toolbar.logo = None
 
     levels = []
