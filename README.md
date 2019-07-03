@@ -52,4 +52,4 @@ The webapp is deployed to Heroku. It can be found at http://www.yahara.info.
 
 A free-tier of a database on Heroku is used to persist the data.
 
-A daily cron job runs that updates the database. The job is created using [Heroku Scheduler](https://devcenter.heroku.com/articles/scheduler), and hits a simple API route on the web-app that causes an update.
+A cron job runs every 30 minutes that updates the database. The job is created using [Heroku Scheduler](https://devcenter.heroku.com/articles/scheduler), and hits a simple API route on the web-app that causes an update. Running the job every 30 minutes has a nice side effect of preventing the website from going into hibernation mode (which Heroku does on the free tier).
