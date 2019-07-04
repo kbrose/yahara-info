@@ -10,6 +10,7 @@ from bokeh.plotting import figure
 from bokeh.palettes import Set2_5 as palette
 from bokeh.models import Legend, HoverTool
 from bokeh.models.widgets import Panel, Tabs
+from bokeh.models import DatetimeTickFormatter
 
 import madison_lake_levels as mll
 
@@ -96,8 +97,71 @@ def database_dump():
         as_attachment=True
     )
 
+@app.route('/plot-year')
+def plot_mobile():
+    df = lldb.to_df()
+    req_levels = mll.required_levels.required_levels
+    height = 550
+    tabs = []
 
-@app.route('/plot')
+    for lake, color in zip(df.columns, palette):
+        p = figure(title=lake.title(),
+                x_axis_label='date',
+                x_axis_type='datetime',
+                y_axis_label='Lake Height (feet above sea level)',
+                tools=[],
+                height=height,
+                sizing_mode='stretch_width')
+        p.toolbar.logo = None
+
+        curr_year = df.index.year.max()
+        df = df[df.index.year >= curr_year - 8]
+        gb = df.copy().groupby(df.index.year)
+        curr_year_df = gb.get_group(curr_year)
+        curr_day_of_year = curr_year_df.index.dayofyear.max()
+        curr_day_of_year = min(curr_day_of_year, 365) # leap years don't exist
+        first_day_of_year = curr_year_df.index[0]
+        max_line = p.line([curr_year_df.index.min(), curr_year_df.index.max()],
+                          2 * [req_levels.loc[lake, 'summer_maximum']],
+                          color='#000000',
+                          line_width=2,
+                          line_dash=[5, 5],
+                          line_alpha=0.5)
+        for year, idx in gb.groups.items():
+            year_df = df.loc[idx].copy()
+            year_df = year_df[year_df.index.dayofyear <= curr_day_of_year]
+            year_df.index = year_df.index.shift(
+                1, first_day_of_year - year_df.index[0]
+            )
+            l = p.line(year_df.index, year_df[lake], color=color, line_width=2,
+                       line_alpha=1 if year == curr_year else 0.3)
+            if year == curr_year:
+                this_year_line = l
+            else:
+                other_year_line = l
+        p.xaxis.formatter = DatetimeTickFormatter(
+            days = ['%b %d'],
+            months = ['%b'],
+            years = ['%b'],
+        )
+        legend = Legend(
+            items=[
+                ('This year', [this_year_line]),
+                ('Past 8 years', [other_year_line]),
+                ('State max', [max_line])
+            ],
+            location=(0, 0)
+        )
+        p.add_layout(legend, 'below')
+        p.legend.orientation = "vertical"
+        tabs.append(Panel(child=p, title=lake.title()))
+
+    script, div = components(Tabs(tabs=tabs))
+    return flask.render_template('plot.html', bokeh_script=script,
+                                 plot_div=div)
+
+
+@app.route('/plot-timeline')
 def plot():
     df = lldb.to_df()
     req_levels = mll.required_levels.required_levels
