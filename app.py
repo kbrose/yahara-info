@@ -98,7 +98,7 @@ def database_dump():
     )
 
 @app.route('/plot-year')
-def plot_mobile():
+def plot_year():
     df = lldb.to_df()
     req_levels = mll.required_levels.required_levels
     height = 550
@@ -106,12 +106,18 @@ def plot_mobile():
 
     for lake, color in zip(df.columns, palette):
         p = figure(title=lake.title(),
-                x_axis_label='date',
-                x_axis_type='datetime',
-                y_axis_label='Lake Height (feet above sea level)',
-                tools=[],
-                height=height,
-                sizing_mode='stretch_width')
+                   x_axis_label='date',
+                   x_axis_type='datetime',
+                   y_axis_label='Lake Height (feet above sea level)',
+                   tools=[],
+                   toolbar_location=None,
+                   height=height,
+                   sizing_mode='stretch_width')
+        p.toolbar.active_drag = None
+        p.toolbar.active_scroll = None
+        p.toolbar.active_tap = None
+        p.toolbar.active_inspect = None
+
         p.toolbar.logo = None
 
         curr_year = df.index.year.max()
@@ -162,7 +168,7 @@ def plot_mobile():
 
 
 @app.route('/plot-timeline')
-def plot():
+def plot_timeline():
     df = lldb.to_df()
     req_levels = mll.required_levels.required_levels
 
