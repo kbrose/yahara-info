@@ -112,13 +112,8 @@ def plot_year():
                    tools=[],
                    toolbar_location=None,
                    height=height,
-                   sizing_mode='stretch_width')
-        p.toolbar.active_drag = None
-        p.toolbar.active_scroll = None
-        p.toolbar.active_tap = None
-        p.toolbar.active_inspect = None
-
-        p.toolbar.logo = None
+                   sizing_mode='stretch_width',
+                   css_classes=['no-interaction'])
 
         curr_year = df.index.year.max()
         df = df[df.index.year >= curr_year - 8]

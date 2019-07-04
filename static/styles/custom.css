@@ -11,4 +11,8 @@ img.overlay-lake {
     padding-top: 20px;
     padding-bottom: 20px;
     color: #fff;
-  }
+}
+
+.no-interaction {
+    pointer-events: none;
+}
