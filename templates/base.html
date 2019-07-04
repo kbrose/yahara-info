@@ -19,6 +19,12 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/custom.css') }}">
     {{ bokeh_script|safe }}
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta property="og:title" content="Yahara Lake Levels">
+    <meta property="og:url" content="http://yahara.info">
+    <meta property="og:description" content="See the current and historical lake level of Mendota, Monona, Waubesa, and Kegonsa."
+    <meta property="og:image" content="http://yahara.info/static/imgs/dam.jpg">
+    <meta property="og:image:alt" content="The Tenney Park Lock and Dam">
+    <meta name="twitter:card" content="summary_large_image">
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         var elems = document.querySelectorAll('.sidenav');
@@ -35,13 +41,12 @@
                 <a href="/" class="brand-logo left hide-on-small-only" title="Home page">Yahara Watershed Lake Levels</a>
                 <a href="/" class="brand-logo left hide-on-med-and-up" title="Home page" style="font-size: 140%;">Yahara Watershed Lake Levels</a>
                 <a href="#" data-target="collapsed-sidenav" class="sidenav-trigger mobile right">
-                    <div class="hide-on-small-only">
-                        View data <i class="material-icons right">timeline</i>
-                    </div>
-                    <div class="hide-on-med-and-up">
-                        <i class="material-icons right">menu</i>
-                    </div>
+                    <i class="material-icons right">menu</i>
                 </a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a href="/plot-year">View yearly comparison</a></li>
+                    <li><a href="/plot-timeline">View timeline</a></li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -49,7 +54,6 @@
         <li><div style="text-align: center; font-weight: 700;">Explore the data</div></li>
         <li><a href="/plot-year">Yearly comparison</a></li>
         <li><a href="/plot-timeline">Timeline (not mobile friendly)</a></li>
-        <li><a href="/db">Download the Data</a></li>
     </ul>
 </header>
 <main>
