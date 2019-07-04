@@ -97,6 +97,7 @@ def database_dump():
         as_attachment=True
     )
 
+
 @app.route('/plot-year')
 def plot_year():
     df = lldb.to_df()
@@ -120,7 +121,7 @@ def plot_year():
         gb = df.copy().groupby(df.index.year)
         curr_year_df = gb.get_group(curr_year)
         curr_day_of_year = curr_year_df.index.dayofyear.max()
-        curr_day_of_year = min(curr_day_of_year, 365) # leap years don't exist
+        curr_day_of_year = min(curr_day_of_year, 365)  # leap years don't exist
         first_day_of_year = curr_year_df.index[0]
         max_line = p.line([curr_year_df.index.min(), curr_year_df.index.max()],
                           2 * [req_levels.loc[lake, 'summer_maximum']],
@@ -134,21 +135,23 @@ def plot_year():
             year_df.index = year_df.index.shift(
                 1, first_day_of_year - year_df.index[0]
             )
-            l = p.line(year_df.index, year_df[lake], color=color, line_width=2,
-                       line_alpha=1 if year == curr_year else 0.3)
+            line = p.line(year_df.index, year_df[lake],
+                          color=color, line_width=2,
+                          line_alpha=1 if year == curr_year else 0.3)
             if year == curr_year:
-                this_year_line = l
+                this_year_line = line
             else:
-                other_year_line = l
+                other_year_line = line
+
         p.xaxis.formatter = DatetimeTickFormatter(
-            days = ['%b %d'],
-            months = ['%b'],
-            years = ['%b'],
+            days=['%b %d'],
+            months=['%b'],
+            years=['%b'],
         )
         legend = Legend(
             items=[
                 ('This year', [this_year_line]),
-                ('Past 8 years', [other_year_line]),
+                ('Past 7 years', [other_year_line]),
                 ('State max', [max_line])
             ],
             location=(0, 0)
