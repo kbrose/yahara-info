@@ -4321,11 +4321,11 @@
     height: 100%;
   }
 
-  @media only screen and (min-width: 993px) {
+  /* @media only screen and (min-width: 993px) {
     nav a.sidenav-trigger {
       display: none;
     }
-  }
+  } */
 
   nav .sidenav-trigger {
     float: left;

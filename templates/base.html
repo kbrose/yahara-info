@@ -29,22 +29,27 @@
 </head>
 <title>Yahara Lake Levels</title>
 <header>
-    <nav class="blue-grey darken-2 white-text">
+    <nav class="blue-grey darken-2 white-text nav-extended">
         <div class="nav-wrapper">
             <div class="container body">
                 <a href="/" class="brand-logo left hide-on-small-only" title="Home page">Yahara Watershed Lake Levels</a>
-                <a href="/" class="brand-logo left hide-on-med-and-up" title="Home page" style="font-size: 130%;">Yahara Watershed Lake Levels</a>
-                <a href="#" data-target="collapsed-sidenav" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
-                <ul class="right hide-on-med-and-down">
-                    <li><a href="/plot"><i class="material-icons left">timeline</i>View Data</a></li>
-                    <li><a href="/db"><i class="material-icons left">get_app</i>Download Data</a></li>
-                </ul>
+                <a href="/" class="brand-logo left hide-on-med-and-up" title="Home page" style="font-size: 140%;">Yahara Watershed Lake Levels</a>
+                <a href="#" data-target="collapsed-sidenav" class="sidenav-trigger mobile right">
+                    <div class="hide-on-small-only">
+                        View data <i class="material-icons right">timeline</i>
+                    </div>
+                    <div class="hide-on-med-and-up">
+                        <i class="material-icons right">menu</i>
+                    </div>
+                </a>
             </div>
         </div>
     </nav>
     <ul class="sidenav" id="collapsed-sidenav">
-        <li><a href="/plot"><i class="material-icons left">timeline</i>View Data</a></li>
-        <li><a href="/db"><i class="material-icons left">get_app</i>Download Data</a></li>
+        <li><div style="text-align: center; font-weight: 700;">Explore the data</div></li>
+        <li><a href="/plot-year">Yearly comparison</a></li>
+        <li><a href="/plot-timeline">Timeline (not mobile friendly)</a></li>
+        <li><a href="/db">Download the Data</a></li>
     </ul>
 </header>
 <main>
