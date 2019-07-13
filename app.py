@@ -61,8 +61,10 @@ def _main_page(df, date=''):
     else:
         msg = ', '.join(high_lakes[:-1]) + f', and {high_lakes[-1]}'
         msg += f' {verb} above their state-required maximums.'
+    bokeh_script, bokeh_div = plot_year()
     return flask.render_template(
-        'main.html', info=info, high_lakes=msg, date=date
+        'main.html', info=info, high_lakes=msg, date=date,
+        plot_div=bokeh_div, bokeh_script=bokeh_script
     )
 
 
@@ -99,15 +101,19 @@ def database_dump():
 
 
 @app.route('/plot-year')
+def old_plot_year():
+    return flask.redirect('/')
+
+
 def plot_year():
     df = lldb.to_df()
     req_levels = mll.required_levels.required_levels
-    height = 550
+    height = 450
     tabs = []
 
     for lake, color in zip(df.columns, palette):
         p = figure(title=lake.title(),
-                   x_axis_label='date',
+                   x_axis_label=None,
                    x_axis_type='datetime',
                    y_axis_label='Lake Height (feet above sea level)',
                    tools=[],
@@ -154,15 +160,14 @@ def plot_year():
                 ('Past 7 years', [other_year_line]),
                 ('State max', [max_line])
             ],
-            location=(0, 0)
+            location=(0, 20)
         )
         p.add_layout(legend, 'below')
         p.legend.orientation = "vertical"
         tabs.append(Panel(child=p, title=lake.title()))
 
     script, div = components(Tabs(tabs=tabs))
-    return flask.render_template('plot.html', bokeh_script=script,
-                                 plot_div=div)
+    return script, div
 
 
 @app.route('/plot-timeline')

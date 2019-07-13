@@ -59,11 +59,11 @@
             </table>
         </div>
     </div>
-    <h4>What does this mean?</h4>
+    <h4><i>Too high</i> compared to what?</h4>
     <p>
         In 1979, the State of Wisconsin Department of Natural Resources (DNR) issued several orders that together set the maximum and minimum levels of Lakes <a href="https://lwrd.countyofdane.com/documents/pdf/DNR-3-SD-77-808.pdf">Mendota</a>, <a href="https://lwrd.countyofdane.com/documents/pdf/DNR-3-SD-77-819.pdf">Monona</a>, <a href="https://lwrd.countyofdane.com/documents/pdf/DNR-3-SD-77-819.pdf">Waubesa</a>, and <a href="https://pdf.countyofdane.com/lwrd/landconservation/DNR-3-WR-1116.pdf">Kegonsa</a>.
     </p>
-    <figure class="container center section">
+    <figure class="center section">
         <a href="https://lwrd.countyofdane.com/documents/pdf/DNR-3-SD-77-808.pdf" title="Open the full DNR order.">
             <img src="/static/imgs/dnr-order.png" alt="Image of the DNR order setting Mendota's levels. Click to open the DNR." class="responsive-img card-panel hoverable" style="border: solid 1px grey; border-radius: 5px;">
         </a>
@@ -94,27 +94,27 @@
         </table>
     </figure>
     <p>
+        Tables are great, but sometimes it's nice to <i>see</i> the data. Below is a graph comparing this year's lake levels to previous years' levels in the same time period. Click on the different lake names below to switch which lake you are seeing.
+    </p>
+    {{ plot_div|safe }}
+    <figcaption class="container center">View the <a href="/plot-timeline">complete timeline</a> (not mobile friendly).</figcaption>
+    <p>
         This data raises a simple question. <i>Why aren't the lake levels kept within their required ranges?</i>
     </p>
     <h4>Difficulties in managing levels</h4>
     <p>
-        Dane County Parks controls the lake levels with several dams. Even if Dane County wanted to keep the lake levels compliant, Mendota's Summer requirements leave only six inches between minimum and maximum. In comparison, the rainfall in August 2018 caused Mendota to rise a full 16 inches. Getting a lake down to a compliant level is also not as simple as flipping a switch and letting the water out. Slow river flow along the Yahara makes reducing water levels a sluggish process.
+        Mendota's Summer requirements leave only six inches between minimum and maximum. The rainfall in August 2018 caused Mendota to rise a full 16 inches. Even if Mendota had been sitting at the minimum level before-hand, it would have skyrocketed to about a foot over its maximum in a week.
+    </p>
+    <p>
+        And once a lake is high, getting it down is not as easy as unplugging a bathtub. Dane County Parks controls the lake levels with several dams, but slow river flow along the Yahara makes reducing water levels a sluggish process.
     </p>
     <figure class="container center section">
         <img src="/static/imgs/dam.jpg" alt="A picture of Tenney Park Lock and Dam." class="responsive-img">
-        <figcaption>The Tenney Park Lock and Dam on August 26, 2018. Credit: Kevin Rose</figcaption>
+        <figcaption>The Tenney Park Lock and Dam on August 26, 2018.</figcaption>
     </figure>
     <p>
         The low flow comes in part because of the relative flatness of the Yahara river. According to the <a href="https://lwrd.countyofdane.com/documents/pdf/Lake-Level-Management-Guide-10-13-10-with-Appendices.pdf">Dane County Lake Level Management Guide for the Yahara Chain of Lakes</a>, the Yahara's height drops less than one inch for every 1,000 feet of length between Kegonsa and the Babcock dam near Waubesa. Combined with heavy vegetation growth and shallow chokepoints, it's amazing the Yahara moves at all.
     </p>
-    <figure class="center section">
-        <img src="/static/imgs/timeline.png" alt="A timeline of when the lakes are above their maximums." class="responsive-img">
-        <figcaption>
-            A timeline showing when each lake is above its maximum level.
-            <br>
-            Explore how <a href="/plot-year" class="section">this year compares to previous years</a>, or view the <a href="/plot-timeline">complete timeline</a> (not mobile friendly).
-        </figcaption>
-    </figure>
     <h4>So what can be done?</h4>
     <p>
         In an <a href="https://madison.com/wsj/news/local/govt-and-politics/impatience-surfaces-over-slow-search-for-ways-to-prevent-the/article_f1db97e4-4163-5c54-bc49-e31d0a8751eb.html">interview</a> with the Wisconsin State Journal, Ken Potter, a UW Madison professor of Civil and Environmental Engineering named several steps that could be taken to mitigate flooding. In addition to lowering Lake Mendota, Potter recommended quickening the Yahara through various means, including enhanced aquatic plant harvesting efforts, and better runoff management from farmers. Potter also suggested increasing the amount of protection for the natural wetlands that "prevent floods by acting as natural sponges".
