@@ -48,7 +48,7 @@ flask run
 
 ## Deploy
 
-The webapp is deployed to Heroku. It can be found at http://www.yahara.info.
+The webapp is deployed to Heroku. It can be found at http://www.yahara.info. The heroku-format `Procfile` and `runtime.txt` are used to control deployment.
 
 A free-tier of a database on Heroku is used to persist the data.
 
