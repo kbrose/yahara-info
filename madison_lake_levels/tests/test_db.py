@@ -13,16 +13,26 @@ class Test_DB():
         self.test_db_name = 'madisonlakes_test'
         user = os.getenv('TEST_DB_USER', os.getenv('USER'))
         self.db_config = {
-            'database': self.test_db_name,
             'user': user
         }
-        pw = os.getenv('TEST_DB_PW')
+
+        pw = os.getenv('TEST_DB_PASS')
         if pw is not None:
             self.db_config['password'] = pw
 
+        host = os.getenv('TEST_DB_HOST')
+        if host is not None:
+            self.db_config['host'] = host
+
+        port = os.getenv('TEST_DB_PORT')
+        if port is not None:
+            self.db_config['port'] = port
+
+
         self._templates_conn = psycopg2.connect(
-            database='template1', user=user
+            database='template1', **self.db_config
         )
+        self.db_config['database'] = self.test_db_name
         self._templates_conn.autocommit = True
         self._templates_curr = self._templates_conn.cursor()
 
