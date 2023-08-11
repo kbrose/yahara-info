@@ -1,8 +1,8 @@
-[![](/static/website-image.png)](http://www.yahara.info)
+![](/static/website-image.png)
+
+**The code here no longer runs, and the website has been shutdown. This repository will be left up for historical purposes.**
 
 # Lake levels from the Yahara Watershed
-
-http://www.yahara.info
 
 Madison Wisconsin and the surrounding Dane County saw near record level rainfalls in late August. Widespread flooding caused over two hundred million dollars in damage ([Associated Press](https://apnews.com/15a2ca91bcb94840bceb192365cf01a1)).
 
@@ -48,8 +48,8 @@ flask run
 
 ## Deploy
 
-The webapp is deployed to Heroku. It can be found at http://www.yahara.info. The heroku-format `Procfile` and `runtime.txt` are used to control deployment.
+The webapp used to be deployed to Heroku, but the USGS data source broke and Heroku got rid of their tier. The heroku-format `Procfile` and `runtime.txt` are used to control deployment.
 
-A free-tier of a database on Heroku is used to persist the data.
+A free-tier of a database on Heroku was used to persist the data.
 
 A cron job runs every 30 minutes that updates the database. The job is created using [Heroku Scheduler](https://devcenter.heroku.com/articles/scheduler), and hits a simple API route on the web-app that causes an update. Running the job every 30 minutes has a nice side effect of preventing the website from going into hibernation mode (which Heroku does on the free tier).
